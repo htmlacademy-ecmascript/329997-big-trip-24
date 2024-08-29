@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Павел Корольков](https://up.htmlacademy.ru/ecmascript/24/user/329997).
-* Наставник: [СергейАндреев](https://htmlacademy.ru/profile/id812127).
+* Наставник: [Сергей Андреев](https://htmlacademy.ru/profile/id812127).
 
 ---
 
