@@ -1,9 +1,9 @@
 import { render } from '../render';
-import SortView from '../view/list-sort-view';
-import ListView from '../view/list-view';
-import ListItemView from '../view/list-item-view';
-import ListEditItemView from '../view/list-edit-item-view';
-import ListCreateItemView from '../view/list-create-item-view';
+import SortView from '../view/list-sort-view.js';
+import ListView from '../view/list-view.js';
+import ListItemView from '../view/list-item-view.js';
+import ListEditItemView from '../view/list-edit-item-view.js';
+import ListCreateItemView from '../view/list-create-item-view.js';
 
 export default class BoardPresenter {
   listComponent = new ListView();

@@ -1,4 +1,4 @@
-import { render, RenderPosition } from './render';
+import { render, RenderPosition } from './render.js';
 import FilterView from './view/list-filter-view.js';
 import TripInfo from './view/trip-info-view.js';
 import LoadingView from './view/list-loading-view.js';
