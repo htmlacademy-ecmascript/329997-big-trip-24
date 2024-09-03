@@ -15,4 +15,3 @@ render(new FilterView(), tripFilterContainer);
 render(new TripInfo(), tripHeaderContainer, RenderPosition.AFTERBEGIN);
 boardPresenter.init();
 
-
