@@ -14,4 +14,3 @@ const boardPresenter = new BoardPresenter({eventsContainer: tripEventsContainer}
 render(new FilterView(), tripFilterContainer);
 render(new TripInfo(), tripHeaderContainer, RenderPosition.AFTERBEGIN);
 boardPresenter.init();
-
