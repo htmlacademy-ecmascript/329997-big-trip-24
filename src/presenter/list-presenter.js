@@ -8,10 +8,9 @@ import PointView from '../view/point-view.js';
 export default class BoardPresenter {
   listComponent = new ListView();
 
-  constructor({pointsContainer, pointsModel, offersContainer}) {
+  constructor({pointsContainer, pointsModel}) {
     this.pointsContainer = pointsContainer;
     this.pointsModel = pointsModel;
-    this.offersContainer = offersContainer;
   }
 
   init() {

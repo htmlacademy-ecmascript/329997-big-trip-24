@@ -10,10 +10,8 @@ const tripFilterContainer = tripHeaderContainer.querySelector('.trip-controls__f
 const pageMainContainer = document.querySelector('.page-main');
 const tripEventsContainer = pageMainContainer.querySelector('.trip-events');
 
-const priceContainer = document.querySelector('.event__price');
-
 const pointsModel = new PointsModel();
-const boardPresenter = new BoardPresenter({pointsContainer: tripEventsContainer, pointsModel, offersContainer: priceContainer});
+const boardPresenter = new BoardPresenter({pointsContainer: tripEventsContainer, pointsModel});
 
 render(new FilterView(), tripFilterContainer);
 render(new TripInfo(), tripHeaderContainer, RenderPosition.AFTERBEGIN);
