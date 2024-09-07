@@ -1,37 +1,44 @@
 import { createElement } from '../render.js';
 import { capitalizeString, getFormattedDayFromDate, getFormattedTimeFromDate, getTimeDelta } from '../utils.js';
 
-const createOfferTemplate = (point) => {
-  const { offers: offersList } = point;
-  const offersArray = offersList[0].offers;
-  if (offersArray.length === 0) {
-    return '';
-  } else {
-    return (
-      `<h4 class="visually-hidden">Offers:</h4>
+const getDestinationById = (point, destinations) => {
+  const { destination } = point;
+  const destinationById = destinations.find((element) => element.id === destination);
+  return destinationById;
+};
+
+const getOffersForPoint = (point, offers) => {
+  const { type, offers: offersList } = point;
+  const offersForType = offers.find((element) => element.type === type).offers;
+  const offersForPoint = [];
+  offersList.forEach((offer) => {
+    offersForType.find((element) => {
+      if (element.id === offer) {
+        offersForPoint.push(element);
+      }
+    });
+  });
+  return offersForPoint;
+};
+
+const createOfferTemplate = (point, offers) => {
+  const offersForPoint = getOffersForPoint(point, offers);
+  return (
+    `<h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-     ${offersArray.map(({ title, price }) => (
-        `<li class="event__offer">
+     ${offersForPoint.map(({ title, price }) => (
+      `<li class="event__offer">
                     <span class="event__offer-title">${title}</span>
                     &plus;&euro;&nbsp;
                     <span class="event__offer-price">${price}</span>
                   </li>`)).join('')}
         </ul>`);
-  }
 };
 
-const createPointTemplate = (point) => {
-  const {
-    base_price: basePrice,
-    date_from: dateFrom,
-    date_to: dateTo,
-    destination: {
-      name,
-    },
-    is_favorite: isFavorite,
-    type,
-  } = point;
-  const offersTemplate = createOfferTemplate(point);
+const createPointTemplate = (point, offers, destinations) => {
+  const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
+  const offersTemplate = createOfferTemplate(point, offers);
+  const destination = getDestinationById(point, destinations);
   return (
     `<li class="trip-events__item">
               <div class="event">
@@ -39,7 +46,7 @@ const createPointTemplate = (point) => {
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${capitalizeString(type)}.png" alt="Event type icon">
                 </div>
-                <h3 class="event__title">${capitalizeString(type)} ${capitalizeString(name)}</h3>
+                <h3 class="event__title">${capitalizeString(type)} ${capitalizeString(destination.name)}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
                     <time class="event__start-time" datetime="2019-03-18T10:30">${getFormattedTimeFromDate(dateFrom)}</time>
@@ -67,12 +74,14 @@ const createPointTemplate = (point) => {
 };
 
 export default class PointView {
-  constructor({ point }) {
+  constructor({ point, offers, destinations }) {
     this.point = point;
+    this.offers = offers;
+    this.destinations = destinations;
   }
 
   getTemplate() {
-    return createPointTemplate(this.point);
+    return createPointTemplate(this.point, this.offers, this.destinations);
   }
 
   getElement() {

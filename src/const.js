@@ -1,8 +1,5 @@
 const SORT_TYPES = ['day', 'event', 'time', 'price', 'offers'];
 const FILTER_TYPES = ['everything', 'future', 'present', 'past'];
-const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-
-const DESTINATIONS = ['Bourges', 'Nantes', 'Paris', 'Amiens', 'Lyon', 'Toulouse', 'Auch', 'Montpellier', 'Marseille', 'Nice'];
 
 const DESTINATIONS_DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -17,7 +14,7 @@ const DESTINATIONS_DESCRIPTIONS = [
   'Nunc fermentum tortor ac porta dapibus.',
   'In rutrum ac purus sit amet tempus.'];
 
-const DAY_FORMAT = 'DD MMM';
+const DAY_FORMAT = 'MMM DD';
 const TIME_FORMAT = 'HH:mm';
 
-export { SORT_TYPES, FILTER_TYPES, POINT_TYPES, DESTINATIONS, DESTINATIONS_DESCRIPTIONS, DAY_FORMAT, TIME_FORMAT };
+export { SORT_TYPES, FILTER_TYPES, DESTINATIONS_DESCRIPTIONS, DAY_FORMAT, TIME_FORMAT };

@@ -15,4 +15,5 @@ const boardPresenter = new BoardPresenter({pointsContainer: tripEventsContainer,
 
 render(new FilterView(), tripFilterContainer);
 render(new TripInfo(), tripHeaderContainer, RenderPosition.AFTERBEGIN);
+
 boardPresenter.init();
