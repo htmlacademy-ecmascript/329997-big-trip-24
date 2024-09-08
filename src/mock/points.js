@@ -8,7 +8,7 @@ const mockPoints = [
     'dateTo': new Date(2024, 0, 2, 11, 32, 0).toISOString(),
     'destination': '1',
     'isFavorite': false,
-    'offers': ['1','2'],
+    'offers': ['1', '2'],
     'type': 'taxi'
   },
   {
@@ -58,7 +58,7 @@ const mockPoints = [
     'dateTo': new Date(2024, 6, 8, 14, 40, 0).toISOString(),
     'destination': '6',
     'isFavorite': false,
-    'offers': ['1','3'],
+    'offers': ['1', '3'],
     'type': 'flight'
   },
   {
@@ -88,11 +88,37 @@ const mockPoints = [
     'dateTo': new Date(2024, 6, 8, 14, 40, 0).toISOString(),
     'destination': '9',
     'isFavorite': true,
-    'offers': ['1','2'],
+    'offers': ['1', '2'],
     'type': 'restaurant'
   },
 ];
 
-const getMockPoint = () => getRandomArrayElement(mockPoints);
+const blankPoint =
+  {
+    'id': '8',
+    'basePrice': 400,
+    'dateFrom': new Date(2024, 6, 7, 10, 40, 0).toISOString(),
+    'dateTo': new Date(2024, 6, 8, 14, 40, 0).toISOString(),
+    'destination': '8',
+    'isFavorite': false,
+    'offers': [1],
+    'type': 'sightseeing'
+  };
 
-export { getMockPoint };
+const getMockPoint = () => getRandomArrayElement(mockPoints);
+const getDefaultBlankPoint = () => blankPoint;
+
+export { getMockPoint, getDefaultBlankPoint };
+
+/* const blankPoint =
+  {
+    'id': '1',
+    'basePrice': 0,
+    'dateFrom': new Date().toISOString(),
+    'dateTo': new Date().toISOString(),
+    'destination': '',
+    'isFavorite': false,
+    'offers': [],
+    'type': 'flight'
+  };
+ */
