@@ -206,10 +206,6 @@ const mockOffers = [
       },
     ]
   },
-  {
-    'type': 'bus',
-    'offers': []
-  }
 ];
 
 const getMockOffers = () => mockOffers;
