@@ -1,10 +1,10 @@
 import { createElement } from '../render.js';
 import { capitalizeString, getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta } from '../utils.js';
 
-const getDestinationById = (point, destinations) => {
+const getPointDestination = (point, destinations) => {
   const { destination } = point;
-  const destinationById = destinations.find((element) => element.id === destination);
-  return destinationById;
+  const pointDestination = destinations.find((element) => element.id === destination);
+  return pointDestination;
 };
 
 const getOffersForType = (point, offers) => {
@@ -39,7 +39,7 @@ const createOfferTemplate = (point, offers) => {
 const createPointTemplate = (point, offers, destinations) => {
   const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
   const offersTemplate = createOfferTemplate(point, offers);
-  const destination = getDestinationById(point, destinations);
+  const destination = getPointDestination(point, destinations);
   return (
     `<li class="trip-events__item">
         <div class="event">
