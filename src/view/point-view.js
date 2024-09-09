@@ -7,9 +7,14 @@ const getDestinationById = (point, destinations) => {
   return destinationById;
 };
 
+const getOffersForType = (point, offers) => {
+  const offersForType = offers.find((element) => element.type === point.type).offers;
+  return offersForType;
+};
+
 const getOffersForPoint = (point, offers) => {
-  const { type, offers: offersList } = point;
-  const offersForType = offers.find((element) => element.type === type).offers;
+  const { offers: offersList } = point;
+  const offersForType = getOffersForType(point, offers);
   const offersForPoint = offersList.map((offer) => offersForType.find((element) => (element.id === offer)));
   return offersForPoint;
 };
