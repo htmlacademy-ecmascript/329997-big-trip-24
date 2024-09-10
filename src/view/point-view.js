@@ -1,26 +1,8 @@
 import { createElement } from '../render.js';
 import { capitalizeString, getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta } from '../utils.js';
 
-const getPointDestination = (point, destinations) => {
-  const { destination } = point;
-  const pointDestination = destinations.find((element) => element.id === destination);
-  return pointDestination;
-};
-
-const getOffersForType = (point, offers) => {
-  const offersForType = offers.find((element) => element.type === point.type).offers;
-  return offersForType;
-};
-
-const getOffersForPoint = (point, offers) => {
-  const { offers: offersList } = point;
-  const offersForType = getOffersForType(point, offers);
-  const offersForPoint = offersList.map((offer) => offersForType.find((element) => (element.id === offer)));
-  return offersForPoint;
-};
-
-const createOfferTemplate = (point, offers) => {
-  const offersForPoint = getOffersForPoint(point, offers);
+const createOfferTemplate = (offers, offersList) => {
+  const offersForPoint = offers.map((offer) => offersList.find((element) => (element.id === offer)));
   if (offersForPoint.length < 1) {
     return '';
   }
@@ -36,10 +18,9 @@ const createOfferTemplate = (point, offers) => {
       </ul>`);
 };
 
-const createPointTemplate = (point, offers, destinations) => {
-  const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
-  const offersTemplate = createOfferTemplate(point, offers);
-  const destination = getPointDestination(point, destinations);
+const createPointTemplate = (point) => {
+  const { basePrice, dateFrom, dateTo, isFavorite, type, offersList, offers, destination } = point;
+  const offersTemplate = createOfferTemplate(offers, offersList);
   return (
     `<li class="trip-events__item">
         <div class="event">
@@ -75,14 +56,12 @@ const createPointTemplate = (point, offers, destinations) => {
 };
 
 export default class PointView {
-  constructor({ point, offers, destinations }) {
+  constructor({ point }) {
     this.point = point;
-    this.offers = offers;
-    this.destinations = destinations;
   }
 
   getTemplate() {
-    return createPointTemplate(this.point, this.offers, this.destinations);
+    return createPointTemplate(this.point);
   }
 
   getElement() {

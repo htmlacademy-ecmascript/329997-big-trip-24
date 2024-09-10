@@ -7,26 +7,31 @@ import EditPointView from '../view/edit-point-view.js';
 export default class BoardPresenter {
   listComponent = new ListView();
 
-  constructor({pointsContainer, pointsModel}) {
+  constructor({ pointsContainer, pointsModel }) {
     this.pointsContainer = pointsContainer;
     this.pointsModel = pointsModel;
   }
 
   init() {
-    this.boardPoints = [...this.pointsModel.getPoints()];
-    this.boardOffers = this.pointsModel.getOffers();
-    this.boardDestinations = this.pointsModel.getDestinations();
-    this.boardBlankPoint = this.pointsModel.getBlankPoint();
-
+    this.offers = this.pointsModel.getOffers();
+    this.destinations = this.pointsModel.getDestinations();
+    this.points = this.pointsModel.getPoints().map((point) =>
+      ({
+        ...point,
+        offersList: this.offers.find((element) => element.type === point.type).offers,
+        destination: this.destinations.find((element) => element.id === point.destination),
+      }));
+    //Blank point>
+    this.blankPoint = this.pointsModel.getBlankPoint();
+    this.blankPoint.offersList = this.offers.find((element) => element.type === this.blankPoint.type).offers;
+    //
     render(new SortView(), this.pointsContainer);
-
     render(this.listComponent, this.pointsContainer);
-    render(new EditPointView({point: this.boardBlankPoint, offers: this.boardOffers, destinations: this.boardDestinations, isNew: true}), this.listComponent.getElement());
-
-    for (let i = 0; i < this.boardPoints.length; i++) {
-      render(new PointView({point: this.boardPoints[i], offers: this.boardOffers, destinations: this.boardDestinations}), this.listComponent.getElement());
-    }
-
-    render(new EditPointView({point: this.boardPoints[1], offers: this.boardOffers, destinations: this.boardDestinations, isNew: false}), this.listComponent.getElement());
+    //new point>
+    render(new EditPointView({ point: this.blankPoint, destinations: this.destinations }), this.listComponent.getElement());
+    //points>
+    this.points.forEach((point) => render(new PointView({ point: point }), this.listComponent.getElement()));
+    //edit point>
+    render(new EditPointView({ point: this.points[1], destinations: this.destinations }), this.listComponent.getElement());
   }
 }

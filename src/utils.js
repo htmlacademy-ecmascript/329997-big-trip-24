@@ -7,7 +7,7 @@ const getRandomArrayElement = (items) => items[Math.floor(Math.random() * items.
 
 const getRandomInteger = (maxValue) => Math.floor(Math.random() * maxValue);
 
-const getRandomPicture = () => `https://loremflickr.com/248/152?random=${getRandomInteger(1000)}`;
+const getRandomPicture = () => `https://loremflickr.com/248/152?random=${getRandomInteger(10000)}`;
 
 const getFormattedDayFromPointDate = (date) => date ? dayjs(date).format(DAY_FORMAT) : '';
 
@@ -16,9 +16,9 @@ const getFormattedTimeFromPointDate = (date) => date ? dayjs(date).format(POINT_
 const getFormattedTimeFromNewPointDate = (date) => date ? dayjs(date).format(NEW_POINT_TIME_FORMAT) : '';
 
 const getTimeDelta = (startTime, endTime) => {
-  const date1 = dayjs(startTime);
-  const date2 = dayjs(endTime);
-  return dayjs(date2.diff(date1)).format('HH[H] mm[M]');
+  const dateFrom = dayjs(startTime);
+  const dateTo = dayjs(endTime);
+  return dayjs(dateTo.diff(dateFrom)).format('HH[H] mm[M]');
 };
 
 export { capitalizeString, getRandomArrayElement, getRandomPicture, getRandomInteger, getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta, getFormattedTimeFromNewPointDate };

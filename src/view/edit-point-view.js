@@ -2,63 +2,26 @@ import { createElement } from '../render.js';
 import { POINT_TYPES } from '../const.js';
 import { capitalizeString, getFormattedTimeFromNewPointDate } from '../utils.js';
 
-const getDestinationsList = (destinations) => {
-  const destinationsNames = destinations.map((destination) => destination['name']);
-  return destinationsNames;
-};
-
-const getPointDestination = (point, destinations) => {
-  const { destination } = point;
-  if (destination === '') {
-    return '';
-  }
-  const PointDestination = destinations.find((element) => element.id === destination);
-  return PointDestination;
-};
-
-const createDestinationOptionsTemplate = (destinations) => {
-  const destinationsList = getDestinationsList(destinations);
-  return (
-    destinationsList.map((element) =>
-      `<option value=${element}></option>`
-    ).join('')
-  );
-};
-
 const createTypesTemplate = (types) => (
   types.map((element) => (
     `<div class="event__type-item">
-      <input id="event-type-${element}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value=${element}>
-      <label class="event__type-label  event__type-label--${element}" for="event-type-${element}-1">${capitalizeString(element)}</label>
-    </div>`
+        <input id="event-type-${element}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value=${element}>
+        <label class="event__type-label  event__type-label--${element}" for="event-type-${element}-1">${capitalizeString(element)}</label>
+      </div>`
   )).join('')
 );
 
-const getOffersForType = (point, offers) => {
-  const offersForType = offers.find((element) => element.type === point.type).offers;
-  return offersForType;
-};
-
-const getOffersForPoint = (point, offers) => {
-  const { offers: offersList } = point;
-  const offersForType = getOffersForType(point, offers);
-  const offersForPoint = offersList.map((offer) => offersForType.find((element) => (element.id === offer)));
-  return offersForPoint;
-};
-
-const createOffersForTypeTemplate = (point, offers) => {
-  const offersForType = getOffersForType(point, offers);
-  const offersForPoint = getOffersForPoint(point, offers);
-  if (offersForType.length < 1) {
+const createOffersTemplate = (offers, offersList) => {
+  if (offersList.length < 1) {
     return '';
   }
   return (
     `<section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
       <div class="event__available-offers">
-      ${offersForType.map((element) =>
+      ${offersList.map((element) =>
       `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${element.name}-${element.id}" type="checkbox" name="event-offer-${element.name}" ${offersForPoint.includes(element) ? 'checked' : ''}>
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${element.name}-${element.id}" type="checkbox" name="event-offer-${element.name}" ${offers.includes(element.id) ? 'checked' : ''}>
         <label class="event__offer-label" for="event-offer-${element.name}-${element.id}">
         <span class="event__offer-title">${element.title}</span>
         &plus;&euro;&nbsp;
@@ -69,8 +32,17 @@ const createOffersForTypeTemplate = (point, offers) => {
   );
 };
 
-const createDestinationPhotoTemplate = (point, destinations) => {
-  const destination = getPointDestination(point, destinations);
+
+const createDestinationOptionsTemplate = (destinations) => {
+  const destinationsList = destinations.map((destination) => destination['name']);
+  return (
+    destinationsList.map((element) =>
+      `<option value=${element}></option>`
+    ).join('')
+  );
+};
+
+const createDestinationPhotoTemplate = (destination) => {
   const destinationPictures = destination.pictures;
   return (
     destinationPictures.map((element) =>
@@ -78,8 +50,7 @@ const createDestinationPhotoTemplate = (point, destinations) => {
     ).join(''));
 };
 
-const createDestinationTemplate = (point, destinations) => {
-  const destination = getPointDestination(point, destinations);
+const createDestinationTemplate = (destination) => {
   if (destination === '') {
     return '';
   }
@@ -89,20 +60,19 @@ const createDestinationTemplate = (point, destinations) => {
         <p class="event__destination-description">${destination.description}</p>
         <div class="event__photos-container">
           <div class="event__photos-tape">
-          ${createDestinationPhotoTemplate(point, destinations)}
+          ${createDestinationPhotoTemplate(destination)}
           </div>
         </div>
       </section>`
   );
 };
 
-const createEditPointTemplate = (point, offers, destinations, isNew) => {
-  const { basePrice, dateFrom, dateTo, type } = point;
-  const offersTemplate = createOffersForTypeTemplate(point, offers);
+const createEditPointTemplate = (point, destinations, isNewPoint) => {
+  const { basePrice, dateFrom, dateTo, type, offersList, offers, destination } = point;
+  const offersTemplate = createOffersTemplate(offers, offersList);
   const typesTemplate = createTypesTemplate(POINT_TYPES);
-  const destination = getPointDestination(point, destinations);
   const destinationsOptionsTemplate = createDestinationOptionsTemplate(destinations);
-  const destinationInfoTemplate = createDestinationTemplate(point, destinations);
+  const destinationInfoTemplate = createDestinationTemplate(destination);
 
   return (
     `<li class="trip-events__item">
@@ -145,7 +115,7 @@ const createEditPointTemplate = (point, offers, destinations, isNew) => {
       <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
     </div>
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    ${isNew ?
+    ${isNewPoint ?
       '<button class="event__reset-btn" type="reset">Cancel</button>' :
       `<button class="event__reset-btn" type="reset">Delete</button>
       <button class="event__rollup-btn" type="button">
@@ -162,15 +132,14 @@ const createEditPointTemplate = (point, offers, destinations, isNew) => {
 };
 
 export default class EditPointView {
-  constructor({ point, offers, destinations, isNew }) {
+  constructor({ point, destinations }) {
     this.point = point;
-    this.offers = offers;
     this.destinations = destinations;
-    this.newPoint = isNew;
+    this.isNewPoint = !this.point.id;
   }
 
   getTemplate() {
-    return createEditPointTemplate(this.point, this.offers, this.destinations, this.newPoint);
+    return createEditPointTemplate(this.point, this.destinations, this.isNewPoint);
   }
 
   getElement() {
