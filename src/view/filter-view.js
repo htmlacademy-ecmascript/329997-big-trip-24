@@ -11,8 +11,8 @@ const createFilterItem = (filter) =>
 const createFilterTemplate = () =>
   `<form class="trip-filters" action="#" method="get">
   ${FILTER_TYPES.map((filterTemplate) => createFilterItem(filterTemplate)).join('')}
-<button class="visually-hidden" type="submit">Accept filter</button>
-</form>`;
+  <button class="visually-hidden" type="submit">Accept filter</button>
+  </form>`;
 
 export default class FilterView {
   getTemplate() {
