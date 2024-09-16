@@ -143,6 +143,6 @@ export default class EditPointView extends AbstractView {
   }
 
   get template() {
-    return createEditPointTemplate(this.point, this.destinations, this.isNewPoint);
+    return createEditPointTemplate(this.#point, this.#destinations, this.#isNewPoint);
   }
 }

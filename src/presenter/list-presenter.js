@@ -1,4 +1,4 @@
-import { render } from '../render';
+import {render} from '../framework/render.js';
 import SortView from '../view/sort-view.js';
 import ListView from '../view/list-view.js';
 import PointView from '../view/point-view.js';
@@ -28,10 +28,10 @@ export default class BoardPresenter {
     render(new SortView(), this.pointsContainer);
     render(this.listComponent, this.pointsContainer);
     //new point>
-    render(new EditPointView({ point: this.blankPoint, destinations: this.destinations }), this.listComponent.getElement());
+    render(new EditPointView({ point: this.blankPoint, destinations: this.destinations }), this.listComponent.element);
     //points>
-    this.points.forEach((point) => render(new PointView({ point: point }), this.listComponent.getElement()));
+    this.points.forEach((point) => render(new PointView({ point: point }), this.listComponent.element));
     //edit point>
-    render(new EditPointView({ point: this.points[1], destinations: this.destinations }), this.listComponent.getElement());
+    render(new EditPointView({ point: this.points[1], destinations: this.destinations }), this.listComponent.element);
   }
 }
