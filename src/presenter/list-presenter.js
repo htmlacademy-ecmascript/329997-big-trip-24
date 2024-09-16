@@ -73,8 +73,10 @@ export default class BoardPresenter {
     this.#blankPoint = this.#pointsModel.blankPoint;
     this.#blankPoint.offersList = this.#offers.find((element) => element.type === this.#blankPoint.type).offers;
     //
+
     render(new SortView(), this.#pointsContainer);
     render(this.#listComponent, this.#pointsContainer);
+
     //points>
     this.#points.forEach((point) => this.#renderPoint(point));
     //
