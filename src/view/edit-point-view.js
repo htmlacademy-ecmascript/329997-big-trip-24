@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { POINT_TYPES } from '../const.js';
 import { capitalizeString, getFormattedTimeFromNewPointDate } from '../utils.js';
 
@@ -31,7 +31,6 @@ const createOffersTemplate = (offers, offersList) => {
       </section>`
   );
 };
-
 
 const createDestinationOptionsTemplate = (destinations) => {
   const destinationsList = destinations.map((destination) => destination['name']);
@@ -131,26 +130,19 @@ const createEditPointTemplate = (point, destinations, isNewPoint) => {
   );
 };
 
-export default class EditPointView {
+export default class EditPointView extends AbstractView {
+  #point = null;
+  #destinations = null;
+  #isNewPoint = null;
+
   constructor({ point, destinations }) {
-    this.point = point;
-    this.destinations = destinations;
-    this.isNewPoint = !this.point.id;
+    super();
+    this.#point = point;
+    this.#destinations = destinations;
+    this.#isNewPoint = !this.#point.id;
   }
 
-  getTemplate() {
+  get template() {
     return createEditPointTemplate(this.point, this.destinations, this.isNewPoint);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }
