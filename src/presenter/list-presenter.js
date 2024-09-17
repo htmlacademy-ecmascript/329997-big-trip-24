@@ -1,37 +1,81 @@
-import { render } from '../render';
+import { render, replace } from '../framework/render.js';
 import SortView from '../view/sort-view.js';
 import ListView from '../view/list-view.js';
 import PointView from '../view/point-view.js';
 import EditPointView from '../view/edit-point-view.js';
 
 export default class BoardPresenter {
-  listComponent = new ListView();
+
+  #pointsContainer = null;
+  #pointsModel = null;
+  #offers = [];
+  #destinations = [];
+  #points = [];
+
+  #listComponent = new ListView();
 
   constructor({ pointsContainer, pointsModel }) {
-    this.pointsContainer = pointsContainer;
-    this.pointsModel = pointsModel;
+    this.#pointsContainer = pointsContainer;
+    this.#pointsModel = pointsModel;
   }
 
+  #renderPoint = (point) => {
+    const escKeyDownHandler = (evt) => {
+      if (evt.key === 'Escape') {
+        evt.preventDefault();
+        replaceEditToView();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    };
+
+    const pointComponent = new PointView({
+      point: point,
+      onEditClick: () => {
+        replaceViewToEdit();
+        document.addEventListener('keydown', escKeyDownHandler);
+      }
+    }
+    );
+
+    const editPointComponent = new EditPointView({
+      point: point,
+      destinations: this.#destinations,
+      onSaveClick: () => {
+        replaceEditToView();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    }
+    );
+
+    function replaceViewToEdit() {
+      replace(editPointComponent, pointComponent);
+    }
+
+    function replaceEditToView() {
+      replace(pointComponent, editPointComponent);
+    }
+
+    render(pointComponent, this.#listComponent.element);
+  };
+
   init() {
-    this.offers = this.pointsModel.getOffers();
-    this.destinations = this.pointsModel.getDestinations();
-    this.points = this.pointsModel.getPoints().map((point) =>
+    this.#offers = this.#pointsModel.offers;
+    this.#destinations = this.#pointsModel.destinations;
+    this.#points = this.#pointsModel.points.map((point) =>
       ({
         ...point,
-        offersList: this.offers.find((element) => element.type === point.type).offers,
-        destination: this.destinations.find((element) => element.id === point.destination),
+        offersByType: this.#offers.find((element) => element.type === point.type).offers,
+        destination: this.#destinations.find((element) => element.id === point.destination),
       }));
-    //Blank point>
-    this.blankPoint = this.pointsModel.getBlankPoint();
-    this.blankPoint.offersList = this.offers.find((element) => element.type === this.blankPoint.type).offers;
-    //
-    render(new SortView(), this.pointsContainer);
-    render(this.listComponent, this.pointsContainer);
-    //new point>
-    render(new EditPointView({ point: this.blankPoint, destinations: this.destinations }), this.listComponent.getElement());
-    //points>
-    this.points.forEach((point) => render(new PointView({ point: point }), this.listComponent.getElement()));
-    //edit point>
-    render(new EditPointView({ point: this.points[1], destinations: this.destinations }), this.listComponent.getElement());
+
+    /*     const blankPoint = {
+      ...this.#pointsModel.blankPoint,
+      offersByType: this.#offers.find((element) => element.type === this.#pointsModel.blankPoint.type).offers,
+    };
+    */
+    render(new SortView(), this.#pointsContainer);
+    render(this.#listComponent, this.#pointsContainer);
+
+    this.#points.forEach((point) => this.#renderPoint(point));
   }
 }

@@ -15,24 +15,24 @@ const BLANK_POINT = {
 };
 
 export default class PointsModel {
-  points = Array.from({ length: POINTS_COUNT }, getMockPoint);
-  offers = getMockOffers();
-  destinations = getMockDestinations();
-  blankPoint = BLANK_POINT;
+  #points = Array.from({ length: POINTS_COUNT }, getMockPoint);
+  #offers = getMockOffers();
+  #destinations = getMockDestinations();
+  #blankPoint = BLANK_POINT;
 
-  getPoints() {
-    return this.points;
+  get points() {
+    return this.#points;
   }
 
-  getBlankPoint() {
-    return this.blankPoint;
+  get blankPoint() {
+    return this.#blankPoint;
   }
 
-  getOffers() {
-    return this.offers;
+  get offers() {
+    return this.#offers;
   }
 
-  getDestinations() {
-    return this.destinations;
+  get destinations() {
+    return this.#destinations;
   }
 }

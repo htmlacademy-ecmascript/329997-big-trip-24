@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { capitalizeString } from '../utils.js';
 import { SORT_TYPES } from '../const.js';
 
@@ -13,20 +13,8 @@ const createSortTemplate = () =>
   ${SORT_TYPES.map((templateItem) => createSortItem(templateItem)).join('')}
   </form>`;
 
-export default class SortView {
-  getTemplate() {
+export default class SortView extends AbstractView {
+  get template() {
     return createSortTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }
