@@ -11,7 +11,6 @@ export default class BoardPresenter {
   #offers = [];
   #destinations = [];
   #points = [];
-  #blankPoint = {};
 
   #listComponent = new ListView();
 
@@ -65,20 +64,18 @@ export default class BoardPresenter {
     this.#points = this.#pointsModel.points.map((point) =>
       ({
         ...point,
-        offersList: this.#offers.find((element) => element.type === point.type).offers,
+        offersByType: this.#offers.find((element) => element.type === point.type).offers,
         destination: this.#destinations.find((element) => element.id === point.destination),
       }));
 
-    //Blank point>
-    this.#blankPoint = this.#pointsModel.blankPoint;
-    this.#blankPoint.offersList = this.#offers.find((element) => element.type === this.#blankPoint.type).offers;
-    //
-
+    /*     const blankPoint = {
+      ...this.#pointsModel.blankPoint,
+      offersByType: this.#offers.find((element) => element.type === this.#pointsModel.blankPoint.type).offers,
+    };
+    */
     render(new SortView(), this.#pointsContainer);
     render(this.#listComponent, this.#pointsContainer);
 
-    //points>
     this.#points.forEach((point) => this.#renderPoint(point));
-    //
   }
 }

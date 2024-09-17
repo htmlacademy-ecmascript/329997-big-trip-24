@@ -11,15 +11,15 @@ const createTypesTemplate = (types) => (
   )).join('')
 );
 
-const createOffersTemplate = (offers, offersList) => {
-  if (offersList.length < 1) {
+const createOffersTemplate = (offers, offersByType) => {
+  if (offersByType.length < 1) {
     return '';
   }
   return (
     `<section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
       <div class="event__available-offers">
-      ${offersList.map((element) =>
+      ${offersByType.map((element) =>
       `<div class="event__offer-selector">
         <input class="event__offer-checkbox  visually-hidden" id="event-offer-${element.name}-${element.id}" type="checkbox" name="event-offer-${element.name}" ${offers.includes(element.id) ? 'checked' : ''}>
         <label class="event__offer-label" for="event-offer-${element.name}-${element.id}">
@@ -67,8 +67,8 @@ const createDestinationTemplate = (destination) => {
 };
 
 const createEditPointTemplate = (point, destinations, isNewPoint) => {
-  const { basePrice, dateFrom, dateTo, type, offersList, offers, destination } = point;
-  const offersTemplate = createOffersTemplate(offers, offersList);
+  const { basePrice, dateFrom, dateTo, type, offersByType, offers, destination } = point;
+  const offersTemplate = createOffersTemplate(offers, offersByType);
   const typesTemplate = createTypesTemplate(POINT_TYPES);
   const destinationsOptionsTemplate = createDestinationOptionsTemplate(destinations);
   const destinationInfoTemplate = createDestinationTemplate(destination);

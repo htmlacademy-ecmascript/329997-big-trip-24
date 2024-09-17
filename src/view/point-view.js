@@ -1,8 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { capitalizeString, getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta } from '../utils.js';
 
-const createOfferTemplate = (offers, offersList) => {
-  const offersForPoint = offers.map((offer) => offersList.find((element) => (element.id === offer)));
+const createOfferTemplate = (offers, offersByType) => {
+  const offersForPoint = offers.map((offer) => offersByType.find((element) => (element.id === offer)));
   if (offersForPoint.length < 1) {
     return '';
   }
@@ -19,8 +19,8 @@ const createOfferTemplate = (offers, offersList) => {
 };
 
 const createPointTemplate = (point) => {
-  const { basePrice, dateFrom, dateTo, isFavorite, type, offersList, offers, destination } = point;
-  const offersTemplate = createOfferTemplate(offers, offersList);
+  const { basePrice, dateFrom, dateTo, isFavorite, type, offersByType, offers, destination } = point;
+  const offersTemplate = createOfferTemplate(offers, offersByType);
   return (
     `<li class="trip-events__item">
         <div class="event">

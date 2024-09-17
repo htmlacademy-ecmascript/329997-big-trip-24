@@ -11,6 +11,7 @@ const createEmptyListTemplate = (message) => `<p class="trip-events__msg">${mess
 
 export default class EmptyListView extends AbstractView {
   #message = Message.EVERYTHING;
+
   get template() {
     return createEmptyListTemplate(this.#message);
   }
