@@ -1,6 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { POINT_TYPES } from '../const.js';
-import { capitalizeString, getFormattedTimeFromNewPointDate } from '../utils.js';
+import { capitalizeString } from '../utils/common.js';
+import { getFormattedTimeFromNewPointDate } from '../utils/utils.js';
 
 const createTypesTemplate = (types) => (
   types.map((element) => (
