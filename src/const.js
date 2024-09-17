@@ -1,5 +1,4 @@
 const SORT_TYPES = ['day', 'event', 'time', 'price', 'offers'];
-const FILTER_TYPES = ['everything', 'future', 'present', 'past'];
 const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 const DESTINATIONS_DESCRIPTIONS = [
@@ -19,4 +18,4 @@ const DAY_FORMAT = 'MMM DD';
 const POINT_TIME_FORMAT = 'HH:mm';
 const NEW_POINT_TIME_FORMAT = 'DD/MM/YY HH:mm';
 
-export { SORT_TYPES, FILTER_TYPES, POINT_TYPES, DESTINATIONS_DESCRIPTIONS, DAY_FORMAT, POINT_TIME_FORMAT, NEW_POINT_TIME_FORMAT };
+export { SORT_TYPES, POINT_TYPES, DESTINATIONS_DESCRIPTIONS, DAY_FORMAT, POINT_TIME_FORMAT, NEW_POINT_TIME_FORMAT };
