@@ -37,7 +37,8 @@ export default class BoardPresenter {
     /* const blankPoint = {
       ...this.#pointsModel.blankPoint,
       offersByType: this.#offers.find((element) => element.type === this.#pointsModel.blankPoint.type).offers,
-    }; */
+    };
+    */
 
     if (this.#points.length < 1) {
       render(new EmptyListView('EVERYTHING'), this.#listComponent.element);
@@ -49,15 +50,14 @@ export default class BoardPresenter {
           destination: this.#destinations.find((element) => element.id === point.destination),
         }));
 
-      render(new TripInfo(), this.#headerContainer, RenderPosition.AFTERBEGIN);
-      render(new SortView(), this.#pointsContainer);
-
       this.#points.forEach((point) => this.#renderPoint(point));
     }
   }
 
   #renderList = () => {
+    render(new TripInfo(), this.#headerContainer, RenderPosition.AFTERBEGIN);
     render(new FilterView(), this.#filterContainer);
+    render(new SortView(), this.#pointsContainer);
     render(this.#listComponent, this.#pointsContainer);
   };
 

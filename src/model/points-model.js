@@ -2,7 +2,7 @@ import { getMockPoint } from '../mock/points.js';
 import { getMockOffers } from '../mock/offers.js';
 import { getMockDestinations } from '../mock/distinatios.js';
 
-const POINTS_COUNT = 0;
+const POINTS_COUNT = 10;
 
 const BLANK_POINT = {
   'basePrice': 0,
