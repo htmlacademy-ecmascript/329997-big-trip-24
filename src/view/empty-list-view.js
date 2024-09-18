@@ -7,12 +7,17 @@ const Message = {
   FUTURE: 'There are no future events now',
 };
 
-const createEmptyListTemplate = (message) => `<p class="trip-events__msg">${message}</p>`;
+const createEmptyListTemplate = (messageType) => `<p class="trip-events__msg">${Message[messageType]}</p>`;
 
 export default class EmptyListView extends AbstractView {
-  #message = Message.EVERYTHING;
+  #messageType = null;
+
+  constructor(messageType) {
+    super();
+    this.#messageType = messageType;
+  }
 
   get template() {
-    return createEmptyListTemplate(this.#message);
+    return createEmptyListTemplate(this.#messageType);
   }
 }
