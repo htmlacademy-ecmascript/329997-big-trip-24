@@ -43,7 +43,7 @@ export default class BoardPresenter {
     if (this.#points.length < 1) {
       render(new EmptyListView('EVERYTHING'), this.#listComponent.element);
     } else {
-      this.#points = this.#pointsModel.points.map((point) =>
+      this.#points = this.#points.map((point) =>
         ({
           ...point,
           offersByType: this.#offers.find((element) => element.type === point.type).offers,

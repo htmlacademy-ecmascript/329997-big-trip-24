@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { capitalizeString } from '../utils/common.js';
+import { capitalizeFirstLetter } from '../utils/common.js';
 import { getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta } from '../utils/utils.js';
 
 const createOfferTemplate = (offers, offersByType) => {
@@ -27,9 +27,9 @@ const createPointTemplate = (point) => {
         <div class="event">
           <time class="event__date" datetime="2019-03-18">${getFormattedDayFromPointDate(dateFrom)}</time>
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/${capitalizeString(type)}.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${capitalizeFirstLetter(type)}.png" alt="Event type icon">
         </div>
-          <h3 class="event__title">${capitalizeString(type)} ${capitalizeString(destination.name)}</h3>
+          <h3 class="event__title">${capitalizeFirstLetter(type)} ${capitalizeFirstLetter(destination.name)}</h3>
         <div class="event__schedule">
           <p class="event__time">
               <time class="event__start-time" datetime="2019-03-18T10:30">${getFormattedTimeFromPointDate(dateFrom)}</time>
