@@ -8,10 +8,12 @@ export default class PointPresenter {
   #pointEditComponent = null;
   #destinations = [];
   #point = {};
+  #handlePointChange = null;
 
-  constructor({ listComponent, destinations }) {
+  constructor({ listComponent, destinations, onPointChange }) {
     this.#listComponent = listComponent;
     this.#destinations = destinations;
+    this.#handlePointChange = onPointChange;
   }
 
   init(point) {
@@ -21,15 +23,16 @@ export default class PointPresenter {
     const prevPointEditComponent = this.#pointEditComponent;
 
     this.#pointComponent = new PointView({
-      point: point,
+      point: this.#point,
       onEditClick: () => {
         this.#replaceViewToEdit();
         document.addEventListener('keydown', this.#escKeyDownHandler);
-      }
+      },
+      onFavoriteClick: this.#handleFavoriteClick,
     });
 
     this.#pointEditComponent = new EditPointView({
-      point: point,
+      point: this.#point,
       destinations: this.#destinations,
       onSaveClick: () => {
         this.#replaceEditToView();
@@ -40,6 +43,14 @@ export default class PointPresenter {
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this.#pointComponent, this.#listComponent.element);
       return;
+    }
+
+    if (this.#listComponent.element.contains(prevPointComponent.element)) {
+      replace(this.#pointComponent, prevPointComponent);
+    }
+
+    if (this.#listComponent.element.contains(prevPointEditComponent.element)) {
+      replace(this.#pointEditComponent, prevPointEditComponent);
     }
 
     remove(prevPointComponent);
@@ -65,5 +76,9 @@ export default class PointPresenter {
       this.#replaceEditToView();
       document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
+  };
+
+  #handleFavoriteClick = () => {
+    this.#handlePointChange({ ...this.#point, isFavorite: !this.#point.isFavorite});
   };
 }

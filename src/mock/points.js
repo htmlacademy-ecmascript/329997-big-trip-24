@@ -1,8 +1,8 @@
-import { getRandomArrayElement } from '../utils/common.js';
+import { nanoid } from 'nanoid';
 
 const mockPoints = [
   {
-    'id': '1',
+    'id': nanoid(),
     'basePrice': 100,
     'dateFrom': new Date(2024, 0, 1, 20, 22, 22).toISOString(),
     'dateTo': new Date(2024, 0, 2, 11, 32, 0).toISOString(),
@@ -12,7 +12,7 @@ const mockPoints = [
     'type': 'taxi'
   },
   {
-    'id': '2',
+    'id': nanoid(),
     'basePrice': 200,
     'dateFrom': new Date(2024, 2, 3, 10, 20, 0).toISOString(),
     'dateTo': new Date(2024, 2, 4, 12, 12, 0).toISOString(),
@@ -22,7 +22,7 @@ const mockPoints = [
     'type': 'bus'
   },
   {
-    'id': '3',
+    'id': nanoid(),
     'basePrice': 300,
     'dateFrom': new Date(2024, 4, 5, 10, 30, 0).toISOString(),
     'dateTo': new Date(2024, 4, 6, 13, 10, 0).toISOString(),
@@ -32,7 +32,7 @@ const mockPoints = [
     'type': 'train'
   },
   {
-    'id': '4',
+    'id': nanoid(),
     'basePrice': 400,
     'dateFrom': new Date(2024, 6, 7, 10, 40, 0).toISOString(),
     'dateTo': new Date(2024, 6, 8, 14, 40, 0).toISOString(),
@@ -42,7 +42,7 @@ const mockPoints = [
     'type': 'ship'
   },
   {
-    'id': '5',
+    'id': nanoid(),
     'basePrice': 400,
     'dateFrom': new Date(2024, 6, 7, 10, 40, 0).toISOString(),
     'dateTo': new Date(2024, 6, 8, 14, 40, 0).toISOString(),
@@ -52,7 +52,7 @@ const mockPoints = [
     'type': 'drive'
   },
   {
-    'id': '6',
+    'id': nanoid(),
     'basePrice': 400,
     'dateFrom': new Date(2024, 6, 7, 10, 40, 0).toISOString(),
     'dateTo': new Date(2024, 6, 8, 14, 40, 0).toISOString(),
@@ -62,7 +62,7 @@ const mockPoints = [
     'type': 'flight'
   },
   {
-    'id': '7',
+    'id': nanoid(),
     'basePrice': 400,
     'dateFrom': new Date(2024, 6, 7, 10, 40, 0).toISOString(),
     'dateTo': new Date(2024, 6, 8, 14, 40, 0).toISOString(),
@@ -72,7 +72,7 @@ const mockPoints = [
     'type': 'check-in'
   },
   {
-    'id': '8',
+    'id': nanoid(),
     'basePrice': 400,
     'dateFrom': new Date(2024, 6, 7, 10, 40, 0).toISOString(),
     'dateTo': new Date(2024, 6, 8, 14, 40, 0).toISOString(),
@@ -82,7 +82,7 @@ const mockPoints = [
     'type': 'sightseeing'
   },
   {
-    'id': '9',
+    'id': nanoid(),
     'basePrice': 400,
     'dateFrom': new Date(2024, 6, 7, 10, 40, 0).toISOString(),
     'dateTo': new Date(2024, 6, 8, 14, 40, 0).toISOString(),
@@ -93,6 +93,4 @@ const mockPoints = [
   },
 ];
 
-const getMockPoint = () => getRandomArrayElement(mockPoints);
-
-export { getMockPoint };
+export { mockPoints };

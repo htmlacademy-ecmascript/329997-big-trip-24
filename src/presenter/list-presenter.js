@@ -1,5 +1,6 @@
 import { render, RenderPosition } from '../framework/render.js';
 import { FilterType } from '../const.js';
+import { updateItem } from '../utils/common.js';
 import SortView from '../view/sort-view.js';
 import ListView from '../view/list-view.js';
 import EmptyListView from '../view/empty-list-view.js';
@@ -18,6 +19,8 @@ export default class BoardPresenter {
   #headerContainer = null;
 
   #listComponent = new ListView();
+
+  #pointPresenters = new Map();
 
   constructor({ pointsContainer, pointsModel, headerContainer, filterContainer }) {
     this.#pointsContainer = pointsContainer;
@@ -64,8 +67,10 @@ export default class BoardPresenter {
       listComponent: this.#listComponent,
       point,
       destinations: this.#destinations,
+      onPointChange: this.#handlePointChange,
     });
     pointPresenter.init(point);
+    this.#pointPresenters.set(point.id, pointPresenter);
   };
 
   #renderEmptyList = () => {
@@ -88,5 +93,9 @@ export default class BoardPresenter {
     render(new SortView(), this.#pointsContainer, RenderPosition.AFTERBEGIN);
   };
 
+  #handlePointChange = (updatedPoint) => {
+    this.#points = updateItem(this.#points, updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+  };
 
 }
