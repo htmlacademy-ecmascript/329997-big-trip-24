@@ -19,10 +19,10 @@ const POINT_TIME_FORMAT = 'HH:mm';
 const NEW_POINT_TIME_FORMAT = 'DD/MM/YY HH:mm';
 
 const FilterType = {
-  EVERYTHING: 'everything',
-  FUTURE: 'future',
-  PRESENT: 'present',
-  PAST: 'past',
+  EVERYTHING: 'EVERYTHING',
+  FUTURE: 'FUTURE',
+  PRESENT: 'PRESENT',
+  PAST: 'PAST',
 };
 
 export { SORT_TYPES, POINT_TYPES, DESTINATIONS_DESCRIPTIONS, DAY_FORMAT, POINT_TIME_FORMAT, NEW_POINT_TIME_FORMAT, FilterType };

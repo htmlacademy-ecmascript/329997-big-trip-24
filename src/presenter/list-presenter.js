@@ -1,11 +1,11 @@
-import { render, replace, RenderPosition } from '../framework/render.js';
+import { render, RenderPosition } from '../framework/render.js';
+import { FilterType } from '../const.js';
 import SortView from '../view/sort-view.js';
 import ListView from '../view/list-view.js';
-import PointView from '../view/point-view.js';
 import EmptyListView from '../view/empty-list-view.js';
-import EditPointView from '../view/edit-point-view.js';
 import FilterView from '../view/filter-view.js';
 import TripInfo from '../view/trip-info-view.js';
+import PointPresenter from './point-presenter.js';
 
 export default class BoardPresenter {
 
@@ -28,7 +28,7 @@ export default class BoardPresenter {
 
   init() {
 
-    this.#renderList();
+    this.#renderFilters();
 
     this.#offers = this.#pointsModel.offers;
     this.#destinations = this.#pointsModel.destinations;
@@ -41,62 +41,52 @@ export default class BoardPresenter {
     */
 
     if (this.#points.length < 1) {
-      render(new EmptyListView('EVERYTHING'), this.#listComponent.element);
-    } else {
-      this.#points = this.#points.map((point) =>
-        ({
-          ...point,
-          offersByType: this.#offers.find((element) => element.type === point.type).offers,
-          destination: this.#destinations.find((element) => element.id === point.destination),
-        }));
-
-      this.#points.forEach((point) => this.#renderPoint(point));
+      this.#renderEmptyList();
+      return;
     }
+
+    this.#points = this.#points.map((point) =>
+      ({
+        ...point,
+        offersByType: this.#offers.find((element) => element.type === point.type).offers,
+        destination: this.#destinations.find((element) => element.id === point.destination),
+      }));
+
+    this.#renderTripInfo();
+    this.#renderList();
+    this.#renderSort();
+
+    this.#points.forEach((point) => this.#renderPoint(point));
   }
 
+  #renderPoint = (point) => {
+    const pointPresenter = new PointPresenter({
+      listComponent: this.#listComponent,
+      point,
+      destinations: this.#destinations,
+    });
+    pointPresenter.init(point);
+  };
+
+  #renderEmptyList = () => {
+    render(new EmptyListView(FilterType.EVERYTHING), this.#pointsContainer);
+  };
+
   #renderList = () => {
-    render(new TripInfo(), this.#headerContainer, RenderPosition.AFTERBEGIN);
-    render(new FilterView(), this.#filterContainer);
-    render(new SortView(), this.#pointsContainer);
     render(this.#listComponent, this.#pointsContainer);
   };
 
-  #renderPoint = (point) => {
-    const escKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        replaceEditToView();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
-
-    const pointComponent = new PointView({
-      point: point,
-      onEditClick: () => {
-        replaceViewToEdit();
-        document.addEventListener('keydown', escKeyDownHandler);
-      }
-    }
-    );
-
-    const editPointComponent = new EditPointView({
-      point: point,
-      destinations: this.#destinations,
-      onSaveClick: () => {
-        replaceEditToView();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    }
-    );
-
-    function replaceViewToEdit() {
-      replace(editPointComponent, pointComponent);
-    }
-
-    function replaceEditToView() {
-      replace(pointComponent, editPointComponent);
-    }
-
-    render(pointComponent, this.#listComponent.element);
+  #renderTripInfo = () => {
+    render(new TripInfo(), this.#headerContainer, RenderPosition.AFTERBEGIN);
   };
+
+  #renderFilters = () => {
+    render(new FilterView(), this.#filterContainer);
+  };
+
+  #renderSort = () => {
+    render(new SortView(), this.#pointsContainer, RenderPosition.AFTERBEGIN);
+  };
+
+
 }
