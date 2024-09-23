@@ -67,7 +67,8 @@ export default class BoardPresenter {
       listComponent: this.#listComponent,
       point,
       destinations: this.#destinations,
-      onPointChange: this.#handlePointChange,
+      onFavoriteChange: this.#handleFavoriteChange,
+      onModeChange: this.#handleModeChange,
     });
     pointPresenter.init(point);
     this.#pointPresenters.set(point.id, pointPresenter);
@@ -93,9 +94,12 @@ export default class BoardPresenter {
     render(new SortView(), this.#pointsContainer, RenderPosition.AFTERBEGIN);
   };
 
-  #handlePointChange = (updatedPoint) => {
+  #handleFavoriteChange = (updatedPoint) => {
     this.#points = updateItem(this.#points, updatedPoint);
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
+  #handleModeChange = () => {
+    this.#pointPresenters.forEach((presenter) => presenter.resetView());
+  };
 }
