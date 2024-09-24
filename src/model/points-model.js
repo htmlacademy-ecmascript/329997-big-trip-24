@@ -1,4 +1,4 @@
-import { mockPoints } from '../mock/points.js';
+import { getMockPoints } from '../mock/points.js';
 import { getMockOffers } from '../mock/offers.js';
 import { getMockDestinations } from '../mock/distinatios.js';
 
@@ -13,7 +13,7 @@ const BLANK_POINT = {
 };
 
 export default class PointsModel {
-  #points = mockPoints;
+  #points = getMockPoints();
   #offers = getMockOffers();
   #destinations = getMockDestinations();
   #blankPoint = BLANK_POINT;

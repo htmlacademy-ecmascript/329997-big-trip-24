@@ -3,6 +3,8 @@ import { POINT_TYPES } from '../const.js';
 import { capitalizeFirstLetter } from '../utils/common.js';
 import { getFormattedTimeFromNewPointDate } from '../utils/utils.js';
 
+const getOffersByType = (allOffers, type) => allOffers.find((element) => element.type === type).offers;
+
 const createTypesTemplate = (types) => (
   types.map((element) => (
     `<div class="event__type-item">
@@ -67,11 +69,12 @@ const createDestinationTemplate = (destination) => {
   );
 };
 
-const createEditPointTemplate = (point, destinations, isNewPoint) => {
-  const { basePrice, dateFrom, dateTo, type, offersByType, offers, destination } = point;
+const createEditPointTemplate = (point, allOffers, allDestinations, isNewPoint) => {
+  const { basePrice, dateFrom, dateTo, type, offers, destination } = point;
+  const offersByType = getOffersByType(allOffers, type);
   const offersTemplate = createOffersTemplate(offers, offersByType);
   const typesTemplate = createTypesTemplate(POINT_TYPES);
-  const destinationsOptionsTemplate = createDestinationOptionsTemplate(destinations);
+  const destinationsOptionsTemplate = createDestinationOptionsTemplate(allDestinations);
   const destinationInfoTemplate = createDestinationTemplate(destination);
 
   return (
@@ -133,14 +136,16 @@ const createEditPointTemplate = (point, destinations, isNewPoint) => {
 
 export default class EditPointView extends AbstractView {
   #point = null;
-  #destinations = null;
+  #allDestinations = [];
+  #allOffers = [];
   #isNewPoint = null;
   #handleSaveClick = null;
 
-  constructor({ point, destinations, onSaveClick }) {
+  constructor({ point, allOffers, allDestinations, onSaveClick }) {
     super();
     this.#point = point;
-    this.#destinations = destinations;
+    this.#allOffers = allOffers;
+    this.#allDestinations = allDestinations;
     this.#isNewPoint = !this.#point.id;
     this.#handleSaveClick = onSaveClick;
 
@@ -148,7 +153,7 @@ export default class EditPointView extends AbstractView {
   }
 
   get template() {
-    return createEditPointTemplate(this.#point, this.#destinations, this.#isNewPoint);
+    return createEditPointTemplate(this.#point, this.#allOffers, this.#allDestinations, this.#isNewPoint);
   }
 
   #saveClickHandler = (evt) => {

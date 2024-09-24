@@ -11,15 +11,17 @@ export default class PointPresenter {
   #listComponent = null;
   #pointComponent = null;
   #pointEditComponent = null;
-  #destinations = [];
+  #allOffers = [];
+  #allDestinations = [];
   #point = {};
   #mode = Mode.DEFAULT;
   #handleFavoriteChange = null;
   #handleEditChange = null;
 
-  constructor({ listComponent, destinations, onFavoriteChange, onModeChange }) {
+  constructor({ listComponent, allOffers, destinations, onFavoriteChange, onModeChange }) {
     this.#listComponent = listComponent;
-    this.#destinations = destinations;
+    this.#allOffers = allOffers;
+    this.#allDestinations = destinations;
     this.#handleFavoriteChange = onFavoriteChange;
     this.#handleEditChange = onModeChange;
   }
@@ -32,6 +34,7 @@ export default class PointPresenter {
 
     this.#pointComponent = new PointView({
       point: this.#point,
+      allOffers: this.#allOffers,
       onEditClick: () => {
         this.#replaceViewToEdit();
         document.addEventListener('keydown', this.#escKeyDownHandler);
@@ -41,7 +44,8 @@ export default class PointPresenter {
 
     this.#pointEditComponent = new EditPointView({
       point: this.#point,
-      destinations: this.#destinations,
+      allOffers: this.#allOffers,
+      allDestinations: this.#allDestinations,
       onSaveClick: () => {
         this.#replaceEditToView();
         document.removeEventListener('keydown', this.#escKeyDownHandler);

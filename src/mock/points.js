@@ -92,5 +92,6 @@ const mockPoints = [
     'type': 'restaurant'
   },
 ];
+const getMockPoints = () => mockPoints;
 
-export { mockPoints };
+export { getMockPoints };

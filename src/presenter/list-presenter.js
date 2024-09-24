@@ -12,8 +12,8 @@ export default class BoardPresenter {
 
   #pointsContainer = null;
   #pointsModel = null;
-  #offers = [];
-  #destinations = [];
+  #allOffers = [];
+  #allDestinations = [];
   #points = [];
   #filterContainer = null;
   #headerContainer = null;
@@ -33,8 +33,8 @@ export default class BoardPresenter {
 
     this.#renderFilters();
 
-    this.#offers = this.#pointsModel.offers;
-    this.#destinations = this.#pointsModel.destinations;
+    this.#allOffers = this.#pointsModel.offers;
+    this.#allDestinations = this.#pointsModel.destinations;
     this.#points = this.#pointsModel.points;
 
     /* const blankPoint = {
@@ -51,13 +51,12 @@ export default class BoardPresenter {
     this.#points = this.#points.map((point) =>
       ({
         ...point,
-        offersByType: this.#offers.find((element) => element.type === point.type).offers,
-        destination: this.#destinations.find((element) => element.id === point.destination),
+        destination: this.#allDestinations.find((element) => element.id === point.destination),
       }));
 
     this.#renderTripInfo();
-    this.#renderList();
     this.#renderSort();
+    this.#renderList();
 
     this.#points.forEach((point) => this.#renderPoint(point));
   }
@@ -66,7 +65,8 @@ export default class BoardPresenter {
     const pointPresenter = new PointPresenter({
       listComponent: this.#listComponent,
       point,
-      destinations: this.#destinations,
+      allOffers: this.#allOffers,
+      destinations: this.#allDestinations,
       onFavoriteChange: this.#handleFavoriteChange,
       onModeChange: this.#handleModeChange,
     });
