@@ -1,11 +1,11 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { capitalizeString } from '../utils/common.js';
+import { capitalizeFirstLetter } from '../utils/common.js';
 import { FilterType } from '../const.js';
 
 const createFilterItem = (filter) =>
   `<div class="trip-filters__filter">
-    <input id="filter-${filter}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filter}" ${(filter === 'everything') ? 'checked' : ''}>
-    <label class="trip-filters__filter-label" for="filter-${filter}">${capitalizeString(filter)}</label>
+    <input id="filter-${filter}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filter}" ${(filter === FilterType.EVERYTHING) ? 'checked' : ''}>
+    <label class="trip-filters__filter-label" for="filter-${filter}">${capitalizeFirstLetter(filter)}</label>
   </div>`;
 
 const createFilterTemplate = () =>

@@ -1,9 +1,14 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { capitalizeString } from '../utils/common.js';
+import { capitalizeFirstLetter } from '../utils/common.js';
 import { getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta } from '../utils/utils.js';
 
-const createOfferTemplate = (offers, offersByType) => {
-  const offersForPoint = offers.map((offer) => offersByType.find((element) => (element.id === offer)));
+const getOffers = (allOffers, offers, type) => {
+  const offersByType = allOffers.find((element) => element.type === type).offers;
+  return offers.map((offer) => offersByType.find((element) => element.id === offer));
+};
+
+const createOfferTemplate = (offersForPoint) => {
+
   if (offersForPoint.length < 1) {
     return '';
   }
@@ -19,17 +24,18 @@ const createOfferTemplate = (offers, offersByType) => {
       </ul>`);
 };
 
-const createPointTemplate = (point) => {
-  const { basePrice, dateFrom, dateTo, isFavorite, type, offersByType, offers, destination } = point;
-  const offersTemplate = createOfferTemplate(offers, offersByType);
+const createPointTemplate = (point, allOffers) => {
+  const { basePrice, dateFrom, dateTo, isFavorite, offers, type, destination } = point;
+  const offersForPoint = getOffers(allOffers, offers, type);
+  const offersTemplate = createOfferTemplate(offersForPoint);
   return (
     `<li class="trip-events__item">
         <div class="event">
           <time class="event__date" datetime="2019-03-18">${getFormattedDayFromPointDate(dateFrom)}</time>
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/${capitalizeString(type)}.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${capitalizeFirstLetter(type)}.png" alt="Event type icon">
         </div>
-          <h3 class="event__title">${capitalizeString(type)} ${capitalizeString(destination.name)}</h3>
+          <h3 class="event__title">${capitalizeFirstLetter(type)} ${capitalizeFirstLetter(destination.name)}</h3>
         <div class="event__schedule">
           <p class="event__time">
               <time class="event__start-time" datetime="2019-03-18T10:30">${getFormattedTimeFromPointDate(dateFrom)}</time>
@@ -58,22 +64,32 @@ const createPointTemplate = (point) => {
 
 export default class PointView extends AbstractView {
   #point = null;
+  #allOffers = [];
   #handleEditClick = null;
+  #handleFavoriteClick = null;
 
-  constructor({ point, onEditClick }) {
+  constructor({ point, allOffers, onEditClick, onFavoriteClick }) {
     super();
     this.#point = point;
+    this.#allOffers = allOffers;
     this.#handleEditClick = onEditClick;
+    this.#handleFavoriteClick = onFavoriteClick;
 
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event__favorite-icon').addEventListener('click', this.#favoriteClickHandler);
   }
 
   get template() {
-    return createPointTemplate(this.#point);
+    return createPointTemplate(this.#point, this.#allOffers);
   }
 
   #editClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleEditClick();
+  };
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFavoriteClick();
   };
 }

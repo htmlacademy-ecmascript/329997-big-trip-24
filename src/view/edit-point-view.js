@@ -1,13 +1,15 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { POINT_TYPES } from '../const.js';
-import { capitalizeString } from '../utils/common.js';
+import { capitalizeFirstLetter } from '../utils/common.js';
 import { getFormattedTimeFromNewPointDate } from '../utils/utils.js';
+
+const getOffersByType = (allOffers, type) => allOffers.find((element) => element.type === type).offers;
 
 const createTypesTemplate = (types) => (
   types.map((element) => (
     `<div class="event__type-item">
         <input id="event-type-${element}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value=${element}>
-        <label class="event__type-label  event__type-label--${element}" for="event-type-${element}-1">${capitalizeString(element)}</label>
+        <label class="event__type-label  event__type-label--${element}" for="event-type-${element}-1">${capitalizeFirstLetter(element)}</label>
       </div>`
   )).join('')
 );
@@ -67,11 +69,12 @@ const createDestinationTemplate = (destination) => {
   );
 };
 
-const createEditPointTemplate = (point, destinations, isNewPoint) => {
-  const { basePrice, dateFrom, dateTo, type, offersByType, offers, destination } = point;
+const createEditPointTemplate = (point, allOffers, allDestinations, isNewPoint) => {
+  const { basePrice, dateFrom, dateTo, type, offers, destination } = point;
+  const offersByType = getOffersByType(allOffers, type);
   const offersTemplate = createOffersTemplate(offers, offersByType);
   const typesTemplate = createTypesTemplate(POINT_TYPES);
-  const destinationsOptionsTemplate = createDestinationOptionsTemplate(destinations);
+  const destinationsOptionsTemplate = createDestinationOptionsTemplate(allDestinations);
   const destinationInfoTemplate = createDestinationTemplate(destination);
 
   return (
@@ -93,7 +96,7 @@ const createEditPointTemplate = (point, destinations, isNewPoint) => {
     </div>
     <div class="event__field-group  event__field-group--destination">
       <label class="event__label  event__type-output" for="event-destination-1">
-        ${capitalizeString(type)}
+        ${capitalizeFirstLetter(type)}
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${(destination) ? destination.name : ''}" list="destination-list-1">
       <datalist id="destination-list-1">
@@ -133,14 +136,16 @@ const createEditPointTemplate = (point, destinations, isNewPoint) => {
 
 export default class EditPointView extends AbstractView {
   #point = null;
-  #destinations = null;
+  #allDestinations = [];
+  #allOffers = [];
   #isNewPoint = null;
   #handleSaveClick = null;
 
-  constructor({ point, destinations, onSaveClick }) {
+  constructor({ point, allOffers, allDestinations, onSaveClick }) {
     super();
     this.#point = point;
-    this.#destinations = destinations;
+    this.#allOffers = allOffers;
+    this.#allDestinations = allDestinations;
     this.#isNewPoint = !this.#point.id;
     this.#handleSaveClick = onSaveClick;
 
@@ -148,7 +153,7 @@ export default class EditPointView extends AbstractView {
   }
 
   get template() {
-    return createEditPointTemplate(this.#point, this.#destinations, this.#isNewPoint);
+    return createEditPointTemplate(this.#point, this.#allOffers, this.#allDestinations, this.#isNewPoint);
   }
 
   #saveClickHandler = (evt) => {
