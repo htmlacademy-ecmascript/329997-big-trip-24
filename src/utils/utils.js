@@ -13,7 +13,27 @@ const getFormattedTimeFromNewPointDate = (date) => date ? dayjs(date).format(NEW
 const getTimeDelta = (startTime, endTime) => {
   const dateFrom = dayjs(startTime);
   const dateTo = dayjs(endTime);
-  return dayjs(dateTo.diff(dateFrom)).format('HH[H] mm[M]');
+  const deltaInMinutes = dateTo.diff(dateFrom, 'minute');
+
+  const days = Math.floor(deltaInMinutes / 1440);
+  const hours = Math.floor((deltaInMinutes % 1440) / 60);
+  const minutes = deltaInMinutes % 60;
+
+  const formattedHours = String(hours).padStart(2, '0');
+  const formattedMinutes = String(minutes).padStart(2, '0');
+
+  if (days === 0) {
+    return `${formattedHours}H ${formattedMinutes}M`;
+  }
+
+  const formattedDays = String(days).padStart(2, '0');
+  return `${formattedDays}D ${formattedHours}H ${formattedMinutes}M`;
 };
 
-export { getRandomPicture, getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta, getFormattedTimeFromNewPointDate };
+const getTimeDeltaNotFormatted = (startTime, endTime) => {
+  const dateFrom = dayjs(startTime);
+  const dateTo = dayjs(endTime);
+  return dateTo.diff(dateFrom);
+};
+
+export { getRandomPicture, getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta, getTimeDeltaNotFormatted, getFormattedTimeFromNewPointDate };

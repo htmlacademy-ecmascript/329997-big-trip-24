@@ -1,5 +1,6 @@
 import { render, RenderPosition } from '../framework/render.js';
-import { FilterType } from '../const.js';
+import { FilterType, SortType } from '../const.js';
+import { sortPointsByDate, sortPointsByTime, sortPointsByPrice } from '../utils/point.js';
 import { updateItem } from '../utils/common.js';
 import SortView from '../view/sort-view.js';
 import ListView from '../view/list-view.js';
@@ -17,6 +18,10 @@ export default class BoardPresenter {
   #points = [];
   #filterContainer = null;
   #headerContainer = null;
+
+  #sortComponent = null;
+  #currentSortType = SortType.DAY;
+  #sourcedPoints = [];
 
   #listComponent = new ListView();
 
@@ -39,7 +44,6 @@ export default class BoardPresenter {
 
     /* const blankPoint = {
       ...this.#pointsModel.blankPoint,
-      offersByType: this.#offers.find((element) => element.type === this.#pointsModel.blankPoint.type).offers,
     };
     */
 
@@ -54,11 +58,23 @@ export default class BoardPresenter {
         destination: this.#allDestinations.find((element) => element.id === point.destination),
       }));
 
+    this.#points = this.#points.sort(sortPointsByDate);
+    this.#sourcedPoints = [...this.#points];
+
     this.#renderTripInfo();
-    this.#renderSort();
+    this.#renderSort(this.#currentSortType);
     this.#renderList();
 
     this.#points.forEach((point) => this.#renderPoint(point));
+  }
+
+  #renderSort() {
+    this.#sortComponent = new SortView({
+      currentSortType: this.#currentSortType,
+      onSortTypeChange: this.#handleSortTypeChange
+    });
+
+    render(this.#sortComponent, this.#pointsContainer, RenderPosition.AFTERBEGIN);
   }
 
   #renderPoint = (point) => {
@@ -90,16 +106,37 @@ export default class BoardPresenter {
     render(new FilterView(), this.#filterContainer);
   };
 
-  #renderSort = () => {
-    render(new SortView(), this.#pointsContainer, RenderPosition.AFTERBEGIN);
-  };
-
   #handleFavoriteChange = (updatedPoint) => {
     this.#points = updateItem(this.#points, updatedPoint);
+    this.#sourcedPoints = updateItem(this.#sourcedPoints, updatedPoint);
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
   #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
+  };
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortTasks(sortType);
+  };
+
+  #sortTasks = (sortType) => {
+    switch (sortType) {
+      case SortType.DAY:
+        this.#points.sort(sortPointsByDate);
+        break;
+      case SortType.TIME:
+        this.#points.sort(sortPointsByTime);
+        break;
+      case SortType.PRICE:
+        this.#points.sort(sortPointsByPrice);
+        break;
+      default:
+        this.#points = [...this.#sourcedPoints];
+    }
+    this.#currentSortType = sortType;
   };
 }
