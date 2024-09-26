@@ -1,4 +1,4 @@
-import { render, RenderPosition } from '../framework/render.js';
+import { render, RenderPosition, remove } from '../framework/render.js';
 import { FilterType, SortType } from '../const.js';
 import { sortPointsByDate, sortPointsByTime, sortPointsByPrice } from '../utils/point.js';
 import { updateItem } from '../utils/common.js';
@@ -62,19 +62,27 @@ export default class BoardPresenter {
     this.#sourcedPoints = [...this.#points];
 
     this.#renderTripInfo();
-    this.#renderSort(this.#currentSortType);
+    this.#renderSort();
     this.#renderList();
 
+    this.#renderPoints();
+  }
+
+  #renderPoints() {
     this.#points.forEach((point) => this.#renderPoint(point));
   }
 
   #renderSort() {
     this.#sortComponent = new SortView({
       currentSortType: this.#currentSortType,
-      onSortTypeChange: this.#handleSortTypeChange
+      onSortTypeChange: this.#handleSortTypeChange,
     });
 
     render(this.#sortComponent, this.#pointsContainer, RenderPosition.AFTERBEGIN);
+  }
+
+  #removeSort() {
+    remove(this.#sortComponent);
   }
 
   #renderPoint = (point) => {
@@ -121,19 +129,32 @@ export default class BoardPresenter {
       return;
     }
     this.#sortTasks(sortType);
+    this.#clearPointsList();
+    this.#renderPoints();
+    this.#removeSort();
+    this.#renderSort();
   };
+
+  #clearPointsList() {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+  }
 
   #sortTasks = (sortType) => {
     switch (sortType) {
       case SortType.DAY:
-        this.#points.sort(sortPointsByDate);
+        this.#points = [...this.#sourcedPoints];
         break;
+      case SortType.EVENT:
+        return;
       case SortType.TIME:
         this.#points.sort(sortPointsByTime);
         break;
       case SortType.PRICE:
         this.#points.sort(sortPointsByPrice);
         break;
+      case SortType.OFFERS:
+        return;
       default:
         this.#points = [...this.#sourcedPoints];
     }

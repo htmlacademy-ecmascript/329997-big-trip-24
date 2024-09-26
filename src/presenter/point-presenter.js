@@ -75,6 +75,11 @@ export default class PointPresenter {
     }
   }
 
+  destroy() {
+    remove(this.#pointComponent);
+    remove(this.#pointEditComponent);
+  }
+
   #replaceViewToEdit() {
     replace(this.#pointEditComponent, this.#pointComponent);
     this.#handleEditChange();
