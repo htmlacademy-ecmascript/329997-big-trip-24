@@ -142,15 +142,15 @@ export default class EditPointView extends AbstractStatefulView {
   #allDestinations = [];
   #allOffers = [];
   #isNewPoint = null;
-  #handleCanselClick = null;
+  #handleCancelClick = null;
 
-  constructor({ point, allOffers, allDestinations, onCanselClick }) {
+  constructor({ point, allOffers, allDestinations, onCancelClick }) {
     super();
     this.#point = point;
     this.#allOffers = allOffers;
     this.#allDestinations = allDestinations;
     this.#isNewPoint = !this.#point.id;
-    this.#handleCanselClick = onCanselClick;
+    this.#handleCancelClick = onCancelClick;
     this._setState(EditPointView.parsePointToState(point));
     this._restoreHandlers();
   }
@@ -162,7 +162,7 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   _restoreHandlers() {
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#canselClickHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#cancelClickHandler);
     this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChooseHandler);
     this.element.querySelector('.event__input--destination').addEventListener('input', this.#destinationChooseHandler);
   }
@@ -171,9 +171,9 @@ export default class EditPointView extends AbstractStatefulView {
     return createEditPointTemplate(this._state, this.#allOffers, this.#allDestinations, this.#isNewPoint);
   }
 
-  #canselClickHandler = (evt) => {
+  #cancelClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleCanselClick();
+    this.#handleCancelClick();
   };
 
   #typeChooseHandler = (evt) => {

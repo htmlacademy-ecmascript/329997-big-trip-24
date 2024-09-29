@@ -47,7 +47,7 @@ export default class PointPresenter {
       point: this.#point,
       allOffers: this.#allOffers,
       allDestinations: this.#allDestinations,
-      onCanselClick: () => {
+      onCancelClick: () => {
         this.#pointEditComponent.reset(this.#point);
         this.#replaceEditToView();
         document.removeEventListener('keydown', this.#escKeyDownHandler);
