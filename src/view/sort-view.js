@@ -11,7 +11,7 @@ const createSortItem = (sortParameter, currentSortType) =>
     value="sort-${sortParameter}"
     ${(sortParameter === SortType.OFFERS || sortParameter === SortType.EVENT) ? 'disabled' : ''}
     ${sortParameter === currentSortType ? 'checked' : ''}>
-    <label class="trip-sort__btn" for="sort-${sortParameter}" data-sort-type="${sortParameter}">${capitalizeFirstLetter(sortParameter)}</label>
+    <label class="trip-sort__btn" for="sort-${sortParameter}">${capitalizeFirstLetter(sortParameter)}</label>
   </div>`;
 
 const createSortTemplate = (currentSortType) =>
@@ -40,7 +40,11 @@ export default class SortView extends AbstractView {
     if (evt.target.tagName !== 'LABEL') {
       return;
     }
+    const choosedSortingType = evt.target.getAttribute('for').replace('sort-', '');
+    if (choosedSortingType === SortType.EVENT || choosedSortingType === SortType.OFFERS) {
+      return;
+    }
     evt.preventDefault();
-    this.#handleSortTypeChange(evt.target.dataset.sortType);
+    this.#handleSortTypeChange(choosedSortingType);
   };
 }

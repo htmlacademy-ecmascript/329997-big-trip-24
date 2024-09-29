@@ -58,7 +58,6 @@ export default class BoardPresenter {
         destination: this.#allDestinations.find((element) => element.id === point.destination),
       }));
 
-    this.#points = this.#points.sort(sortPointsByDate);
     this.#sourcedPoints = [...this.#points];
 
     this.#renderTripInfo();
@@ -128,11 +127,11 @@ export default class BoardPresenter {
     if (this.#currentSortType === sortType) {
       return;
     }
-    this.#sortTasks(sortType);
-    this.#clearPointsList();
-    this.#renderPoints();
+    this.#sortPoints(sortType);
     this.#removeSort();
     this.#renderSort();
+    this.#clearPointsList();
+    this.#renderPoints();
   };
 
   #clearPointsList() {
@@ -140,21 +139,17 @@ export default class BoardPresenter {
     this.#pointPresenters.clear();
   }
 
-  #sortTasks = (sortType) => {
+  #sortPoints = (sortType) => {
     switch (sortType) {
       case SortType.DAY:
-        this.#points = [...this.#sourcedPoints];
+        this.#points.sort(sortPointsByDate);
         break;
-      case SortType.EVENT:
-        return;
       case SortType.TIME:
         this.#points.sort(sortPointsByTime);
         break;
       case SortType.PRICE:
         this.#points.sort(sortPointsByPrice);
         break;
-      case SortType.OFFERS:
-        return;
       default:
         this.#points = [...this.#sourcedPoints];
     }
