@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { getRandomInteger } from './common.js';
-import { DAY_FORMAT, POINT_TIME_FORMAT, NEW_POINT_TIME_FORMAT } from '../const.js';
+import { DAY_FORMAT, POINT_TIME_FORMAT, NEW_POINT_TIME_FORMAT, MINUTES_IN_DAY, MINUTES_IN_HOUR, TIME_PAD_FORMAT } from '../const.js';
 
 const getRandomPicture = () => `https://loremflickr.com/248/152?random=${getRandomInteger(10000)}`;
 
@@ -13,7 +13,27 @@ const getFormattedTimeFromNewPointDate = (date) => date ? dayjs(date).format(NEW
 const getTimeDelta = (startTime, endTime) => {
   const dateFrom = dayjs(startTime);
   const dateTo = dayjs(endTime);
-  return dayjs(dateTo.diff(dateFrom)).format('HH[H] mm[M]');
+  const deltaInMinutes = dateTo.diff(dateFrom, 'minute');
+
+  const days = Math.floor(deltaInMinutes / MINUTES_IN_DAY);
+  const hours = Math.floor((deltaInMinutes % MINUTES_IN_DAY) / MINUTES_IN_HOUR);
+  const minutes = deltaInMinutes % MINUTES_IN_HOUR;
+
+  const formattedHours = String(hours).padStart(TIME_PAD_FORMAT, '0');
+  const formattedMinutes = String(minutes).padStart(TIME_PAD_FORMAT, '0');
+
+  if (days === 0) {
+    return `${formattedHours}H ${formattedMinutes}M`;
+  }
+
+  const formattedDays = String(days).padStart(TIME_PAD_FORMAT, '0');
+  return `${formattedDays}D ${formattedHours}H ${formattedMinutes}M`;
 };
 
-export { getRandomPicture, getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta, getFormattedTimeFromNewPointDate };
+const getTimeDeltaNotFormatted = (startTime, endTime) => {
+  const dateFrom = dayjs(startTime);
+  const dateTo = dayjs(endTime);
+  return dateTo.diff(dateFrom);
+};
+
+export { getRandomPicture, getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta, getTimeDeltaNotFormatted, getFormattedTimeFromNewPointDate };
