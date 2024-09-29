@@ -55,7 +55,6 @@ export default class BoardPresenter {
     this.#points = this.#points.map((point) =>
       ({
         ...point,
-        destination: this.#allDestinations.find((element) => element.id === point.destination),
       }));
 
     this.#sourcedPoints = [...this.#points];
