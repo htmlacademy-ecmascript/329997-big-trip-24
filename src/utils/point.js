@@ -9,6 +9,15 @@ const isPresentPoint = (dateFrom, dateTo) =>
   (dayjs().toJSON().isBefore(dateFrom, 'D') || dayjs().toJSON().isSame(dateFrom, 'D')) &&
   (dayjs().toJSON().isAfter(dateTo, 'D') || dayjs().toJSON().isSame(dateTo, 'D'));
 
+const getOffersByType = (allOffers, type) => allOffers.find((element) => element.type === type).offers;
+
+const getOffers = (allOffers, offers, type) => {
+  const offersByType = allOffers.find((element) => element.type === type).offers;
+  return offers.map((offer) => offersByType.find((element) => element.id === offer));
+};
+
+const getDestination = (allDestinations, destination) => allDestinations.find((element) => element.id === destination);
+
 const getWeightForSortParameter = (parameterA, parameterB) => {
   if (parameterA === null && parameterB === null) {
     return 0;
@@ -38,4 +47,4 @@ const sortPointsByPrice = (pointA, pointB) => {
   return weight ?? dayjs(pointA.basePrice).diff(dayjs(pointB.basePrice));
 };
 
-export { isFuturePoint, isPastPoint, isPresentPoint, sortPointsByDate, sortPointsByTime, sortPointsByPrice };
+export { isFuturePoint, isPastPoint, isPresentPoint, sortPointsByDate, sortPointsByTime, sortPointsByPrice, getOffersByType, getOffers, getDestination };

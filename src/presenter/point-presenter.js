@@ -50,7 +50,7 @@ export default class PointPresenter {
       onCancelClick: () => {
         this.#pointEditComponent.reset(this.#point);
         this.#replaceEditToView();
-        document.removeEventListener('keydown', this.#escKeyDownHandler);
+        this.#removeEscKeyDownListener();
       }
     });
 
@@ -83,6 +83,10 @@ export default class PointPresenter {
     remove(this.#pointEditComponent);
   }
 
+  #removeEscKeyDownListener() {
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
+  }
+
   #replaceViewToEdit() {
     replace(this.#pointEditComponent, this.#pointComponent);
     this.#handleEditChange();
@@ -99,7 +103,7 @@ export default class PointPresenter {
       evt.preventDefault();
       this.#pointEditComponent.reset(this.#point);
       this.#replaceEditToView();
-      document.removeEventListener('keydown', this.#escKeyDownHandler);
+      this.#removeEscKeyDownListener();
     }
   };
 

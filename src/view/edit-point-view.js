@@ -1,11 +1,8 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { POINT_TYPES } from '../const.js';
+import { getOffersByType, getDestination } from '../utils/point.js';
 import { capitalizeFirstLetter } from '../utils/common.js';
 import { getFormattedTimeFromNewPointDate } from '../utils/utils.js';
-
-const getOffersByType = (allOffers, type) => allOffers.find((element) => element.type === type).offers;
-
-const getDestination = (allDestinations, destination) => allDestinations.find((element) => element.id === destination);
 
 const createTypesTemplate = (types) => (
   types.map((element) => (
@@ -178,10 +175,10 @@ export default class EditPointView extends AbstractStatefulView {
 
   #typeChooseHandler = (evt) => {
     evt.preventDefault();
-    const choosedType = evt.target.closest('div').firstElementChild.value;
+    const choosedType = evt.target.textContent.toLowerCase();
     this.updateElement({
       type: choosedType,
-      offers: '',
+      offers: [],
     });
   };
 

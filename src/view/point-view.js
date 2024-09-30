@@ -1,13 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { capitalizeFirstLetter } from '../utils/common.js';
+import { getOffers, getDestination } from '../utils/point.js';
 import { getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta } from '../utils/utils.js';
-
-const getOffers = (allOffers, offers, type) => {
-  const offersByType = allOffers.find((element) => element.type === type).offers;
-  return offers.map((offer) => offersByType.find((element) => element.id === offer));
-};
-
-const getDestination = (allDestinations, destination) => allDestinations.find((element) => element.id === destination);
 
 const createOfferTemplate = (offersForPoint) => {
 
