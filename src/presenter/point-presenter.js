@@ -35,6 +35,7 @@ export default class PointPresenter {
     this.#pointComponent = new PointView({
       point: this.#point,
       allOffers: this.#allOffers,
+      allDestinations: this.#allDestinations,
       onEditClick: () => {
         this.#replaceViewToEdit();
         document.addEventListener('keydown', this.#escKeyDownHandler);
@@ -46,9 +47,10 @@ export default class PointPresenter {
       point: this.#point,
       allOffers: this.#allOffers,
       allDestinations: this.#allDestinations,
-      onSaveClick: () => {
+      onCancelClick: () => {
+        this.#pointEditComponent.reset(this.#point);
         this.#replaceEditToView();
-        document.removeEventListener('keydown', this.#escKeyDownHandler);
+        this.#removeEscKeyDownListener();
       }
     });
 
@@ -71,6 +73,7 @@ export default class PointPresenter {
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceEditToView();
     }
   }
@@ -78,6 +81,10 @@ export default class PointPresenter {
   destroy() {
     remove(this.#pointComponent);
     remove(this.#pointEditComponent);
+  }
+
+  #removeEscKeyDownListener() {
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
   #replaceViewToEdit() {
@@ -94,8 +101,9 @@ export default class PointPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceEditToView();
-      document.removeEventListener('keydown', this.#escKeyDownHandler);
+      this.#removeEscKeyDownListener();
     }
   };
 

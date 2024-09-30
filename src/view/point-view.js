@@ -1,11 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { capitalizeFirstLetter } from '../utils/common.js';
+import { getOffers, getDestination } from '../utils/point.js';
 import { getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta } from '../utils/utils.js';
-
-const getOffers = (allOffers, offers, type) => {
-  const offersByType = allOffers.find((element) => element.type === type).offers;
-  return offers.map((offer) => offersByType.find((element) => element.id === offer));
-};
 
 const createOfferTemplate = (offersForPoint) => {
 
@@ -24,8 +20,9 @@ const createOfferTemplate = (offersForPoint) => {
       </ul>`);
 };
 
-const createPointTemplate = (point, allOffers) => {
+const createPointTemplate = (point, allOffers, allDestinations) => {
   const { basePrice, dateFrom, dateTo, isFavorite, offers, type, destination } = point;
+  const destinationForPoint = getDestination(allDestinations, destination);
   const offersForPoint = getOffers(allOffers, offers, type);
   const offersTemplate = createOfferTemplate(offersForPoint);
   return (
@@ -35,7 +32,7 @@ const createPointTemplate = (point, allOffers) => {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${capitalizeFirstLetter(type)}.png" alt="Event type icon">
         </div>
-          <h3 class="event__title">${capitalizeFirstLetter(type)} ${capitalizeFirstLetter(destination.name)}</h3>
+          <h3 class="event__title">${capitalizeFirstLetter(type)} ${capitalizeFirstLetter(destinationForPoint.name)}</h3>
         <div class="event__schedule">
           <p class="event__time">
               <time class="event__start-time" datetime="2019-03-18T10:30">${getFormattedTimeFromPointDate(dateFrom)}</time>
@@ -65,13 +62,15 @@ const createPointTemplate = (point, allOffers) => {
 export default class PointView extends AbstractView {
   #point = null;
   #allOffers = [];
+  #allDestinations = [];
   #handleEditClick = null;
   #handleFavoriteClick = null;
 
-  constructor({ point, allOffers, onEditClick, onFavoriteClick }) {
+  constructor({ point, allOffers, allDestinations, onEditClick, onFavoriteClick }) {
     super();
     this.#point = point;
     this.#allOffers = allOffers;
+    this.#allDestinations = allDestinations;
     this.#handleEditClick = onEditClick;
     this.#handleFavoriteClick = onFavoriteClick;
 
@@ -80,7 +79,7 @@ export default class PointView extends AbstractView {
   }
 
   get template() {
-    return createPointTemplate(this.#point, this.#allOffers);
+    return createPointTemplate(this.#point, this.#allOffers, this.#allDestinations);
   }
 
   #editClickHandler = (evt) => {

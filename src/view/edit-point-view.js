@@ -1,9 +1,8 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { POINT_TYPES } from '../const.js';
+import { getOffersByType, getDestination } from '../utils/point.js';
 import { capitalizeFirstLetter } from '../utils/common.js';
 import { getFormattedTimeFromNewPointDate } from '../utils/utils.js';
-
-const getOffersByType = (allOffers, type) => allOffers.find((element) => element.type === type).offers;
 
 const createTypesTemplate = (types) => (
   types.map((element) => (
@@ -75,7 +74,8 @@ const createEditPointTemplate = (point, allOffers, allDestinations, isNewPoint) 
   const offersTemplate = createOffersTemplate(offers, offersByType);
   const typesTemplate = createTypesTemplate(POINT_TYPES);
   const destinationsOptionsTemplate = createDestinationOptionsTemplate(allDestinations);
-  const destinationInfoTemplate = createDestinationTemplate(destination);
+  const destinationForPoint = getDestination(allDestinations, destination);
+  const destinationInfoTemplate = createDestinationTemplate(destinationForPoint);
 
   return (
     `<li class="trip-events__item">
@@ -98,7 +98,7 @@ const createEditPointTemplate = (point, allOffers, allDestinations, isNewPoint) 
       <label class="event__label  event__type-output" for="event-destination-1">
         ${capitalizeFirstLetter(type)}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${(destination) ? destination.name : ''}" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${(destinationForPoint) ? destinationForPoint.name : ''}" list="destination-list-1">
       <datalist id="destination-list-1">
         ${destinationsOptionsTemplate}
       </datalist>
@@ -134,30 +134,66 @@ const createEditPointTemplate = (point, allOffers, allDestinations, isNewPoint) 
   );
 };
 
-export default class EditPointView extends AbstractView {
+export default class EditPointView extends AbstractStatefulView {
   #point = null;
   #allDestinations = [];
   #allOffers = [];
   #isNewPoint = null;
-  #handleSaveClick = null;
+  #handleCancelClick = null;
 
-  constructor({ point, allOffers, allDestinations, onSaveClick }) {
+  constructor({ point, allOffers, allDestinations, onCancelClick }) {
     super();
     this.#point = point;
     this.#allOffers = allOffers;
     this.#allDestinations = allDestinations;
     this.#isNewPoint = !this.#point.id;
-    this.#handleSaveClick = onSaveClick;
+    this.#handleCancelClick = onCancelClick;
+    this._setState(EditPointView.parsePointToState(point));
+    this._restoreHandlers();
+  }
 
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#saveClickHandler);
+  reset(point) {
+    this.updateElement(
+      EditPointView.parsePointToState(point),
+    );
+  }
+
+  _restoreHandlers() {
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#cancelClickHandler);
+    this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChooseHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('input', this.#destinationChooseHandler);
   }
 
   get template() {
-    return createEditPointTemplate(this.#point, this.#allOffers, this.#allDestinations, this.#isNewPoint);
+    return createEditPointTemplate(this._state, this.#allOffers, this.#allDestinations, this.#isNewPoint);
   }
 
-  #saveClickHandler = (evt) => {
+  #cancelClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleSaveClick();
+    this.#handleCancelClick();
   };
+
+  #typeChooseHandler = (evt) => {
+    evt.preventDefault();
+    const choosedType = evt.target.textContent.toLowerCase();
+    this.updateElement({
+      type: choosedType,
+      offers: [],
+    });
+  };
+
+  #destinationChooseHandler = (evt) => {
+    evt.preventDefault();
+    const destinationInput = evt.target.value;
+    const choosedDestination = this.#allDestinations.find((element) => element.name === destinationInput);
+    if (choosedDestination !== undefined) {
+      this.updateElement({
+        destination: choosedDestination.id,
+      });
+    }
+  };
+
+  static parsePointToState(point) {
+    return { ...point };
+  }
 }
