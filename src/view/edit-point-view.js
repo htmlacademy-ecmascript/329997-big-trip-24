@@ -237,6 +237,7 @@ export default class EditPointView extends AbstractStatefulView {
         enableTime: true,
         'time_24hr': true,
         defaultDate: this._state.dateFrom,
+        maxDate: this._state.dateTo,
         onChange: this.#dateFromChangeHandler,
         onValueUpdate: this.#datepickerTo.set('defaultDate', dateFromInput),
       },

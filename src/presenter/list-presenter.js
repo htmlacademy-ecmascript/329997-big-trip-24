@@ -9,7 +9,7 @@ import FilterView from '../view/filter-view.js';
 import TripInfo from '../view/trip-info-view.js';
 import PointPresenter from './point-presenter.js';
 
-export default class BoardPresenter {
+export default class ListPresenter {
 
   #pointsContainer = null;
   #pointsModel = null;
@@ -41,6 +41,7 @@ export default class BoardPresenter {
     this.#allOffers = this.#pointsModel.offers;
     this.#allDestinations = this.#pointsModel.destinations;
     this.#points = this.#pointsModel.points;
+    this.#points = this.#points.sort(sortPointsByDate);
 
     /* const blankPoint = {
       ...this.#pointsModel.blankPoint,
