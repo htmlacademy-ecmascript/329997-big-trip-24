@@ -168,12 +168,11 @@ export default class ListPresenter {
     this.#pointPresenters.clear();
   }
 
-  #clearPointsList({ resetSortType = false }) {
+  #clearPointsList(resetSortType = false) {
 
     this.#clearPointsPresenters();
 
     remove(this.#sortComponent);
-    remove(this.#pointsContainer);
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
     }
