@@ -142,16 +142,21 @@ export default class EditPointView extends AbstractStatefulView {
   #allOffers = [];
   #isNewPoint = null;
   #handleCancelClick = null;
+  #handleFormSubmit = null;
+  #handleDeleteClick = null;
   #datepickerFrom = null;
   #datepickerTo = null;
 
-  constructor({ point, allOffers, allDestinations, onCancelClick }) {
+  constructor({ point, allOffers, allDestinations, onCancelClick, onSaveClick, onDeleteClick }) {
     super();
     this.#point = point;
     this.#allOffers = allOffers;
     this.#allDestinations = allDestinations;
     this.#isNewPoint = !this.#point.id;
     this.#handleCancelClick = onCancelClick;
+    this.#handleFormSubmit = onSaveClick;
+    this.#handleDeleteClick = onDeleteClick;
+
     this._setState(EditPointView.parsePointToState(point));
     this._restoreHandlers();
   }
@@ -178,6 +183,8 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#cancelClickHandler);
     this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChooseHandler);
     this.element.querySelector('.event__input--destination').addEventListener('input', this.#destinationChooseHandler);
+    this.element.querySelector('.event__save-btn').addEventListener('click', this.#saveClickHandler);
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
 
     this.#setDateToPicker();
     this.#setDateFromPicker();
@@ -190,6 +197,16 @@ export default class EditPointView extends AbstractStatefulView {
   #cancelClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleCancelClick();
+  };
+
+  #saveClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleDeleteClick(EditPointView.parseStateToPoint(this._state));
   };
 
   #typeChooseHandler = (evt) => {
@@ -214,6 +231,11 @@ export default class EditPointView extends AbstractStatefulView {
 
   static parsePointToState(point) {
     return { ...point };
+  }
+
+  static parseStateToPoint(state) {
+    const point = {...state};
+    return point;
   }
 
   #dateFromChangeHandler = ([inputDate]) => {

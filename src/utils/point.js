@@ -47,4 +47,6 @@ const sortPointsByPrice = (pointA, pointB) => {
   return weight ?? dayjs(pointA.basePrice).diff(dayjs(pointB.basePrice));
 };
 
-export { isFuturePoint, isPastPoint, isPresentPoint, sortPointsByDate, sortPointsByTime, sortPointsByPrice, getOffersByType, getOffers, getDestination };
+const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
+
+export { isFuturePoint, isPastPoint, isPresentPoint, sortPointsByDate, sortPointsByTime, sortPointsByPrice, getOffersByType, getOffers, getDestination, isDatesEqual };
