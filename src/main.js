@@ -42,7 +42,7 @@ function handleNewPointFormClose() {
 }
 
 function handleNewPointButtonClick() {
-  listPresenter.createTask();
+  listPresenter.createPoint();
   newPointButtonComponent.element.disabled = true;
 }
 

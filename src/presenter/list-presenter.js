@@ -78,7 +78,7 @@ export default class ListPresenter {
     this.#renderPointsList();
   }
 
-  createTask() {
+  createPoint() {
     this.#currentSortType = SortType.DEFAULT;
     this.#filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init();
