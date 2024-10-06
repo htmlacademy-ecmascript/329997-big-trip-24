@@ -1,26 +1,11 @@
 import { getMockPoints } from '../mock/points.js';
 import Observable from '../framework/observable.js';
 
-const BLANK_POINT = {
-  'basePrice': 0,
-  'dateFrom': new Date().toISOString(),
-  'dateTo': new Date().toISOString(),
-  'destination': '',
-  'isFavorite': false,
-  'offers': [],
-  'type': 'flight'
-};
-
 export default class PointsModel extends Observable {
   #points = getMockPoints();
-  #blankPoint = BLANK_POINT;
 
   get points() {
     return this.#points;
-  }
-
-  get blankPoint() {
-    return this.#blankPoint;
   }
 
   updatePoint(updateType, update) {

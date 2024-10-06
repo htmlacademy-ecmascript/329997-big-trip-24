@@ -49,7 +49,7 @@ export default class PointPresenter {
       point: this.#point,
       allOffers: this.#allOffers,
       allDestinations: this.#allDestinations,
-      onCancelClick: () => {
+      onRollupClick: () => {
         this.#pointEditComponent.reset(this.#point);
         this.#replaceEditToView();
         this.#removeEscKeyDownListener();

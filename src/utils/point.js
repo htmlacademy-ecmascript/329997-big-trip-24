@@ -16,7 +16,7 @@ const getOffers = (allOffers, offers, type) => {
   return offers.map((offer) => offersByType.find((element) => element.id === offer));
 };
 
-const getDestination = (allDestinations, destination) => allDestinations.find((element) => element.id === destination);
+const getDestination = (allDestinations, destination) => destination ? allDestinations.find((element) => element.id === destination) : '';
 
 const getWeightForSortParameter = (parameterA, parameterB) => {
   if (parameterA === null && parameterB === null) {
