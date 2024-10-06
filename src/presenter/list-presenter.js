@@ -1,10 +1,10 @@
 import { render, RenderPosition, remove } from '../framework/render.js';
 import { FilterType, SortType, UpdateType, UserAction } from '../const.js';
 import { sortPointsByDate, sortPointsByTime, sortPointsByPrice } from '../utils/point.js';
+import { filter } from '../utils/filter.js';
 import SortView from '../view/sort-view.js';
 import ListView from '../view/list-view.js';
 import EmptyListView from '../view/empty-list-view.js';
-import FilterView from '../view/filter-view.js';
 import TripInfo from '../view/trip-info-view.js';
 import PointPresenter from './point-presenter.js';
 
@@ -14,37 +14,44 @@ export default class ListPresenter {
   #pointsModel = [];
   #offersModel = [];
   #destinationsModel = [];
-  #filterContainer = null;
+  #filtersModel = null;
   #headerContainer = null;
+  #emptyListComponent = null;
 
   #sortComponent = null;
   #currentSortType = SortType.DAY;
+  #filterType = FilterType.EVERYTHING;
 
   #listComponent = new ListView();
 
   #pointPresenters = new Map();
 
-  constructor({ pointsContainer, pointsModel, offersModel, destinationsModel, headerContainer, filterContainer }) {
+  constructor({ pointsContainer, pointsModel, offersModel, filtersModel, destinationsModel, headerContainer}) {
     this.#pointsContainer = pointsContainer;
     this.#pointsModel = pointsModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
+    this.#filtersModel = filtersModel;
     this.#headerContainer = headerContainer;
-    this.#filterContainer = filterContainer;
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#filtersModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
+    this.#filterType = this.#filtersModel.filter;
+    const points = this.#pointsModel.points;
+    const filteredPoints = filter[this.#filterType](points);
+
     switch (this.#currentSortType) {
       case SortType.DAY:
-        return [...this.#pointsModel.points].sort(sortPointsByDate);
+        return filteredPoints.sort(sortPointsByDate);
       case SortType.TIME:
-        return [...this.#pointsModel.points].sort(sortPointsByTime);
+        return filteredPoints.sort(sortPointsByTime);
       case SortType.PRICE:
-        return [...this.#pointsModel.points].sort(sortPointsByPrice);
+        return filteredPoints.sort(sortPointsByPrice);
     }
-    return this.#pointsModel.points;
+    return filteredPoints;
   }
 
   get allOffers() {
@@ -56,13 +63,6 @@ export default class ListPresenter {
   }
 
   init() {
-
-    this.#renderFilters();
-
-    /* const blankPoint = {
-      ...this.#pointsModel.blankPoint,
-    };
-    */
 
     this.#renderTripInfo();
     this.#renderPointsList();
@@ -106,16 +106,13 @@ export default class ListPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   };
 
-  #renderEmptyList = () => {
-    render(new EmptyListView(FilterType.EVERYTHING), this.#pointsContainer);
-  };
+  #renderEmptyList() {
+    this.#emptyListComponent = new EmptyListView(this.#filterType);
+    render(this.#emptyListComponent, this.#pointsContainer, RenderPosition.AFTERBEGIN);
+  }
 
   #renderTripInfo = () => {
     render(new TripInfo(), this.#headerContainer, RenderPosition.AFTERBEGIN);
-  };
-
-  #renderFilters = () => {
-    render(new FilterView(), this.#filterContainer);
   };
 
   #handleModeChange = () => {
@@ -172,6 +169,9 @@ export default class ListPresenter {
 
     this.#clearPointsPresenters();
 
+    if (this.#emptyListComponent) {
+      remove(this.#emptyListComponent);
+    }
     remove(this.#sortComponent);
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;

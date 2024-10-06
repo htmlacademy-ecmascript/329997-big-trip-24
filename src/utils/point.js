@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
 import { getTimeDeltaNotFormatted } from './utils';
 
-const isFuturePoint = (dateFrom) => dateFrom && dayjs().toJSON().isBefore(dateFrom, 'D');
-const isPastPoint = (dateTo) => dateTo && dayjs().toJSON().isAfter(dateTo, 'D');
+const isFuturePoint = (dateFrom) => dateFrom && dayjs().isBefore(dateFrom, 'D');
+const isPastPoint = (dateTo) => dateTo && dayjs().isAfter(dateTo, 'D');
 const isPresentPoint = (dateFrom, dateTo) =>
   dateFrom &&
   dateTo &&
-  (dayjs().toJSON().isBefore(dateFrom, 'D') || dayjs().toJSON().isSame(dateFrom, 'D')) &&
-  (dayjs().toJSON().isAfter(dateTo, 'D') || dayjs().toJSON().isSame(dateTo, 'D'));
+  (dayjs().isBefore(dateFrom, 'D') || dayjs().isSame(dateFrom, 'D')) &&
+  (dayjs().isAfter(dateTo, 'D') || dayjs().isSame(dateTo, 'D'));
 
 const getOffersByType = (allOffers, type) => allOffers.find((element) => element.type === type).offers;
 
