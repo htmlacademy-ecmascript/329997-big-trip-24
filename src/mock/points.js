@@ -12,7 +12,7 @@ const mockPoints = [
     'offers': ['1', '2'],
     'type': 'taxi'
   },
-  {
+/*   {
     'id': nanoid(),
     'basePrice': 20,
     'dateFrom': dayjs('2024-10-3T7:50').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
@@ -91,7 +91,7 @@ const mockPoints = [
     'isFavorite': true,
     'offers': ['1', '2'],
     'type': 'restaurant'
-  },
+  }, */
 ];
 const getMockPoints = () => mockPoints;
 

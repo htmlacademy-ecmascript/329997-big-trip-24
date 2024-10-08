@@ -1,36 +1,31 @@
 import { getMockPoints } from '../mock/points.js';
-import { getMockOffers } from '../mock/offers.js';
-import { getMockDestinations } from '../mock/distinatios.js';
+import Observable from '../framework/observable.js';
 
-const BLANK_POINT = {
-  'basePrice': 0,
-  'dateFrom': new Date().toISOString(),
-  'dateTo': new Date().toISOString(),
-  'destination': '',
-  'isFavorite': false,
-  'offers': [],
-  'type': 'flight'
-};
-
-export default class PointsModel {
+export default class PointsModel extends Observable {
   #points = getMockPoints();
-  #offers = getMockOffers();
-  #destinations = getMockDestinations();
-  #blankPoint = BLANK_POINT;
 
   get points() {
     return this.#points;
   }
 
-  get blankPoint() {
-    return this.#blankPoint;
+  updatePoint(updateType, update) {
+    this.#points = this.#points.map((point) => point.id === update.id ? update : point);
+
+    this._notify(updateType, update);
   }
 
-  get offers() {
-    return this.#offers;
+  addPoint(updateType, update) {
+    this.#points = [
+      update,
+      ...this.#points,
+    ];
+
+    this._notify(updateType, update);
   }
 
-  get destinations() {
-    return this.#destinations;
+  deletePoint(updateType, update) {
+    this.#points = this.#points.filter((point) => point.id !== update.id);
+
+    this._notify(updateType);
   }
 }

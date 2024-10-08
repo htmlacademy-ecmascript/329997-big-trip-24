@@ -5,6 +5,4 @@ const getRandomArrayElement = (items) => items[Math.floor(Math.random() * items.
 
 const getRandomInteger = (maxValue) => Math.floor(Math.random() * maxValue);
 
-const updateItem = (items, update) => items.map((item) => item.id === update.id ? update : item);
-
-export { capitalizeFirstLetter, getRandomArrayElement, getRandomInteger, updateItem };
+export { capitalizeFirstLetter, getRandomArrayElement, getRandomInteger };
