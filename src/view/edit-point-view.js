@@ -5,8 +5,11 @@ import { capitalizeFirstLetter } from '../utils/common.js';
 import { getFormattedTimeFromNewPointDate } from '../utils/utils.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import he from 'he';
+import { nanoid } from 'nanoid';
 
 const BLANK_POINT = {
+  id: nanoid(),
   basePrice: 0,
   dateFrom: new Date().toISOString(),
   dateTo: new Date().toISOString(),
@@ -107,27 +110,25 @@ const createEditPointTemplate = (point, allOffers, allDestinations, isNewPoint) 
       </div>
     </div>
     <div class="event__field-group  event__field-group--destination">
-      <label class="event__label  event__type-output" for="event-destination-1">
-        ${capitalizeFirstLetter(type)}
-      </label>
-      <input class="event__input  event__input--destination" id="event-destination-${destinationForPoint.id}" type="text" name="event-destination" value="${(destinationForPoint) ? destinationForPoint.name : ''}" list="destination-list-${id}" required>
-      <datalist id="destination-list-${destinationForPoint.id}">
+      <label class="event__label  event__type-output" for="event-destination-${id}">${capitalizeFirstLetter(type)}</label>
+      <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${he.encode((destinationForPoint) ? destinationForPoint.name : '')}" pattern="/^(Paris|Nice)$/gi" list="destination-list-${id}" required>
+      <datalist id="destination-list-${id}">
         ${destinationsOptionsTemplate}
       </datalist>
     </div>
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-${id}">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${getFormattedTimeFromNewPointDate(dateFrom)}">
+      <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${getFormattedTimeFromNewPointDate(dateFrom)}" required>
       &mdash;
       <label class="visually-hidden" for="event-end-time-${id}">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${getFormattedTimeFromNewPointDate(dateTo)}">
+      <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${getFormattedTimeFromNewPointDate(dateTo)}" required>
     </div>
     <div class="event__field-group  event__field-group--price">
       <label class="event__label" for="event-price-${id}">
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price${id}" type="text" name="event-price" value="${basePrice}">
+      <input class="event__input  event__input--price" id="event-price${id}" type="text" name="event-price" value="${basePrice}" onkeyup="this.value = this.value.replace(/[^0-9]/g,'');" required>
     </div>
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     ${isNewPoint ?
@@ -204,6 +205,8 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('.event__save-btn').addEventListener('click', this.#saveClickHandler);
     this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersChangeHandler);
 
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationsChangeHandler);
+
 
     this.#setDateToPicker();
     this.#setDateFromPicker();
@@ -268,6 +271,15 @@ export default class EditPointView extends AbstractStatefulView {
     this.updateElement({
       offers: pointOffers,
     });
+  };
+
+  #destinationsChangeHandler = (evt) => {
+    evt.preventDefault();
+    const allDestinationsNames = [];
+    this.#allDestinations.forEach((element) => allDestinationsNames.push(element.name));
+    if (!allDestinationsNames.includes(evt.target.value)) {
+      evt.target.value = '';
+    }
   };
 
   static parsePointToState(point) {
