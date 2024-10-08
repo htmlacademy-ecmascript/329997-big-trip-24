@@ -50,3 +50,9 @@ render(newPointButtonComponent, tripHeaderContainer);
 
 filterPresenter.init();
 listPresenter.init();
+
+
+//to do
+// Сохранние моков при изменении
+// Валидация инпутов
+//

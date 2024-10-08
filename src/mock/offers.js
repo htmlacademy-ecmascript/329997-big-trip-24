@@ -16,7 +16,7 @@ const mockOffers = [
       },
       {
         'id': '3',
-        'name': 'rradio',
+        'name': 'radio',
         'title': 'Choose radio station',
         'price': 20
       },

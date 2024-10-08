@@ -41,6 +41,7 @@ export default class ListPresenter {
       allDestinations: this.allDestinations,
       pointsContainer: this.#listComponent.element,
       onDataChange: this.#handleViewAction,
+      onModelEvent: this.#handleModelEvent,
       onDestroy: onNewPointDestroy,
     });
 
@@ -84,12 +85,15 @@ export default class ListPresenter {
     this.#newPointPresenter.init();
     this.#removeSort();
     this.#renderSort();
+    if (this.#emptyListComponent) {
+      remove(this.#emptyListComponent);
+    }
   }
 
   #renderPointsList() {
     render(this.#listComponent, this.#pointsContainer);
 
-    if (this.points.length < 1) {
+    if (this.points.length === 0) {
       this.#renderEmptyList();
       return;
     }

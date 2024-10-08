@@ -6,17 +6,19 @@ import {UserAction, UpdateType} from '../const.js';
 export default class NewPointPresenter {
   #pointsContainer = null;
   #handleDataChange = null;
+  #handleModelEvent = null;
   #handleDestroy = null;
   #allOffers = null;
   #allDestinations = null;
 
   #editPointComponent = null;
 
-  constructor({allOffers, allDestinations, pointsContainer, onDataChange, onDestroy}) {
+  constructor({allOffers, allDestinations, pointsContainer, onDataChange, onModelEvent, onDestroy}) {
     this.#allOffers = allOffers;
     this.#allDestinations = allDestinations;
     this.#pointsContainer = pointsContainer;
     this.#handleDataChange = onDataChange;
+    this.#handleModelEvent = onModelEvent;
     this.#handleDestroy = onDestroy;
   }
 
@@ -60,6 +62,9 @@ export default class NewPointPresenter {
   };
 
   #handleCancelClick = () => {
+    this.#handleModelEvent(
+      UpdateType.MINOR,
+    );
     this.destroy();
   };
 
