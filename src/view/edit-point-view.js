@@ -81,7 +81,7 @@ const createDestinationTemplate = (destination) => {
 };
 
 const createEditPointTemplate = (point, allOffers, allDestinations, isNewPoint) => {
-  const { basePrice, dateFrom, dateTo, type, offers, destination } = point;
+  const { id, basePrice, dateFrom, dateTo, type, offers, destination } = point;
   const offersByType = getOffersByType(allOffers, type);
   const offersTemplate = createOffersTemplate(offers, offersByType);
   const typesTemplate = createTypesTemplate(POINT_TYPES);
@@ -94,11 +94,11 @@ const createEditPointTemplate = (point, allOffers, allDestinations, isNewPoint) 
     <form class="event event--edit" action="#" method="post">
     <header class="event__header">
     <div class="event__type-wrapper">
-      <label class="event__type  event__type-btn" for="event-type-toggle-1">
+      <label class="event__type  event__type-btn" for="event-type-toggle-${id}">
         <span class="visually-hidden">Choose event type</span>
         <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
       </label>
-      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox">
       <div class="event__type-list">
         <fieldset class="event__type-group">
           <legend class="visually-hidden">Event type</legend>
@@ -110,24 +110,24 @@ const createEditPointTemplate = (point, allOffers, allDestinations, isNewPoint) 
       <label class="event__label  event__type-output" for="event-destination-1">
         ${capitalizeFirstLetter(type)}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-${destinationForPoint.id}" type="text" name="event-destination" value="${(destinationForPoint) ? destinationForPoint.name : ''}" list="destination-list-1" required>
+      <input class="event__input  event__input--destination" id="event-destination-${destinationForPoint.id}" type="text" name="event-destination" value="${(destinationForPoint) ? destinationForPoint.name : ''}" list="destination-list-${id}" required>
       <datalist id="destination-list-${destinationForPoint.id}">
         ${destinationsOptionsTemplate}
       </datalist>
     </div>
     <div class="event__field-group  event__field-group--time">
-      <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormattedTimeFromNewPointDate(dateFrom)}">
+      <label class="visually-hidden" for="event-start-time-${id}">From</label>
+      <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${getFormattedTimeFromNewPointDate(dateFrom)}">
       &mdash;
-      <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormattedTimeFromNewPointDate(dateTo)}">
+      <label class="visually-hidden" for="event-end-time-${id}">To</label>
+      <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${getFormattedTimeFromNewPointDate(dateTo)}">
     </div>
     <div class="event__field-group  event__field-group--price">
-      <label class="event__label" for="event-price-1">
+      <label class="event__label" for="event-price-${id}">
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+      <input class="event__input  event__input--price" id="event-price${id}" type="text" name="event-price" value="${basePrice}">
     </div>
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     ${isNewPoint ?
@@ -291,9 +291,9 @@ export default class EditPointView extends AbstractStatefulView {
   };
 
   #setDateFromPicker() {
-    const dateFromInput = this.element.querySelector('#event-start-time-1').value;
+    const dateFromInput = this.element.querySelector(`#event-start-time-${this.#point.id}`).value;
     this.#datepickerFrom = flatpickr(
-      this.element.querySelector('#event-start-time-1'),
+      this.element.querySelector(`#event-start-time-${this.#point.id}`),
       {
         dateFormat: 'd/m/y H:i',
         enableTime: true,
@@ -308,7 +308,7 @@ export default class EditPointView extends AbstractStatefulView {
 
   #setDateToPicker() {
     this.#datepickerTo = flatpickr(
-      this.element.querySelector('#event-end-time-1'),
+      this.element.querySelector(`#event-end-time-${this.#point.id}`),
       {
         dateFormat: 'd/m/y H:i',
         enableTime: true,
