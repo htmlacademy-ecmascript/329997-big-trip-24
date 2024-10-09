@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
-import { getRandomInteger } from './common.js';
 import { DAY_FORMAT, POINT_TIME_FORMAT, NEW_POINT_TIME_FORMAT, MINUTES_IN_DAY, MINUTES_IN_HOUR, TIME_PAD_FORMAT } from '../const.js';
 
-const getRandomPicture = () => `https://loremflickr.com/248/152?random=${getRandomInteger(10000)}`;
 
 const getFormattedDayFromPointDate = (date) => date ? dayjs(date).format(DAY_FORMAT) : '';
 
@@ -36,4 +34,4 @@ const getTimeDeltaNotFormatted = (startTime, endTime) => {
   return dateTo.diff(dateFrom);
 };
 
-export { getRandomPicture, getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta, getTimeDeltaNotFormatted, getFormattedTimeFromNewPointDate };
+export { getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta, getTimeDeltaNotFormatted, getFormattedTimeFromNewPointDate };
