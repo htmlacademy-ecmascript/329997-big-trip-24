@@ -36,8 +36,6 @@ export default class ListPresenter {
     this.#headerContainer = headerContainer;
 
     this.#newPointPresenter = new NewPointPresenter({
-      allOffers: this.allOffers,
-      allDestinations: this.allDestinations,
       pointsContainer: this.#listComponent.element,
       onDataChange: this.#handleViewAction,
       onModelEvent: this.#handleModelEvent,
@@ -81,7 +79,7 @@ export default class ListPresenter {
   createPoint() {
     this.#currentSortType = SortType.DEFAULT;
     this.#filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this.#newPointPresenter.init();
+    this.#newPointPresenter.init(this.allOffers, this.allDestinations);
     this.#removeSort();
     this.#renderSort();
     if (this.#emptyListComponent) {
