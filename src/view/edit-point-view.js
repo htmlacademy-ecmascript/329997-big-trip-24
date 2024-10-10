@@ -29,7 +29,7 @@ const createTypesTemplate = (types) => (
 );
 
 const createOffersTemplate = (offers, offersByType) => {
-  if (offersByType.length < 1) {
+  if (offersByType.length === 0) {
     return '';
   }
   return (
@@ -38,8 +38,8 @@ const createOffersTemplate = (offers, offersByType) => {
       <div class="event__available-offers">
       ${offersByType.map((element) =>
       `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${element.name}-${element.id}" type="checkbox" name="event-offer-${element.name}" ${offers.includes(element.id) ? 'checked' : ''}>
-        <label class="event__offer-label" for="event-offer-${element.name}-${element.id}">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${element.id}" type="checkbox" name="event-offer-${element.id}" data-id="${element.id}" ${offers.includes(element.id) ? 'checked' : ''}>
+        <label class="event__offer-label" for="event-offer-${element.id}">
         <span class="event__offer-title">${element.title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${element.price}</span>
@@ -203,10 +203,12 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChooseHandler);
     this.element.querySelector('.event__input--destination').addEventListener('input', this.#destinationChooseHandler);
     this.element.querySelector('.event__save-btn').addEventListener('click', this.#saveClickHandler);
-    this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersChangeHandler);
-
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationsChangeHandler);
 
+    if (getOffersByType(this.#allOffers, this.#point.type).length === 0) {
+      return;
+    }
+    this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersChangeHandler);
 
     this.#setDateToPicker();
     this.#setDateFromPicker();
@@ -259,15 +261,12 @@ export default class EditPointView extends AbstractStatefulView {
   #offersChangeHandler = (evt) => {
     evt.preventDefault();
     let pointOffers = this._state.offers;
-    const clickedOfferId = evt.target.id.split('-')[3];
+    const clickedOfferId = evt.target.dataset.id;
     if (pointOffers.includes(clickedOfferId)) {
       pointOffers = pointOffers.filter((element) => element !== clickedOfferId);
-      this.updateElement({
-        offers: pointOffers,
-      });
-      return;
+    } else {
+      pointOffers.push(clickedOfferId);
     }
-    pointOffers.push(clickedOfferId);
     this.updateElement({
       offers: pointOffers,
     });
