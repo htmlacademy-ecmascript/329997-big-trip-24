@@ -27,11 +27,9 @@ export default class PointsModel extends Observable {
   async init() {
     try {
       const points = await this.#pointsApiService.points;
-      const offers = await this.#pointsApiService.offers;
-      const destinations = await this.#pointsApiService.destinations;
       this.#points = points.map(this.#adaptToClient);
-      this.#offers = offers;
-      this.#destinations = destinations;
+      this.#offers = await this.#pointsApiService.offers;
+      this.#destinations = await this.#pointsApiService.destinations;
     } catch (err) {
       this.#points = [];
       this.#offers = [];
@@ -48,7 +46,7 @@ export default class PointsModel extends Observable {
       this.#points = this.#points.map((point) => point.id === update.id ? update : point);
       this._notify(updateType, updatedPoint);
     } catch(err) {
-      throw new Error('Can\'t update task');
+      throw new Error('Can\'t update point');
     }
   }
 
