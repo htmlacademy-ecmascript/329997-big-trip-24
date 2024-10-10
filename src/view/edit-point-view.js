@@ -264,12 +264,9 @@ export default class EditPointView extends AbstractStatefulView {
     const clickedOfferId = evt.target.dataset.id;
     if (pointOffers.includes(clickedOfferId)) {
       pointOffers = pointOffers.filter((element) => element !== clickedOfferId);
-      this.updateElement({
-        offers: pointOffers,
-      });
-      return;
+    } else {
+      pointOffers.push(clickedOfferId);
     }
-    pointOffers.push(clickedOfferId);
     this.updateElement({
       offers: pointOffers,
     });
