@@ -39,12 +39,12 @@ const sortPointsByDate = (pointA, pointB) => {
 const sortPointsByTime = (pointA, pointB) => {
   const timeDeltaA = getTimeDeltaNotFormatted(pointA.dateFrom, pointA.dateTo);
   const timeDeltaB = getTimeDeltaNotFormatted(pointB.dateFrom, pointB.dateTo);
-  return timeDeltaA - timeDeltaB;
+  return timeDeltaB - timeDeltaA;
 };
 
 const sortPointsByPrice = (pointA, pointB) => {
-  const weight = getWeightForSortParameter(pointA.basePrice, pointB.basePrice);
-  return weight ?? dayjs(pointA.basePrice).diff(dayjs(pointB.basePrice));
+  const weight = getWeightForSortParameter(pointB.basePrice, pointA.basePrice);
+  return weight ?? dayjs(pointB.basePrice).diff(dayjs(pointA.basePrice));
 };
 
 const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
