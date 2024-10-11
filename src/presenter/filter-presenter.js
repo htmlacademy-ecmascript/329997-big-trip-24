@@ -39,7 +39,11 @@ export default class FilterPresenter {
     remove(prevFilterComponent);
   }
 
-  #handleModelEvent = () => {
+  #handleModelEvent = (updateType) => {
+    if (updateType === UpdateType.FAILED) {
+      remove(this.#filterComponent);
+      return;
+    }
     this.init();
   };
 

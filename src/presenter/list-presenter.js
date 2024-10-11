@@ -10,6 +10,7 @@ import EmptyListView from '../view/empty-list-view.js';
 import TripInfo from '../view/trip-info-view.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
+import FailedLoadView from '../view/failed-load-view.js';
 
 const TimeLimit = {
   LOWER_LIMIT: 350,
@@ -29,17 +30,20 @@ export default class ListPresenter {
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
   #isLoading = true;
+  #isFailed = false;
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
   });
 
+  #tripInfoComponent = new TripInfo();
   #listComponent = new ListView();
   #loadingComponent = new LoadingView();
+  #failedLoadingComponent = new FailedLoadView();
 
   #pointPresenters = new Map();
 
-  constructor({ pointsContainer, pointsModel, filtersModel, headerContainer, onNewPointDestroy}) {
+  constructor({ pointsContainer, pointsModel, filtersModel, headerContainer, onNewPointDestroy }) {
     this.#pointsContainer = pointsContainer;
     this.#pointsModel = pointsModel;
     this.#filtersModel = filtersModel;
@@ -100,6 +104,11 @@ export default class ListPresenter {
   #renderPointsList() {
     render(this.#listComponent, this.#pointsContainer);
 
+    if (this.#isFailed) {
+      this.#renderFailedLoading();
+      return;
+    }
+
     if (this.#isLoading) {
       this.#renderLoading();
       return;
@@ -144,13 +153,17 @@ export default class ListPresenter {
     render(this.#loadingComponent, this.#listComponent.element, RenderPosition.AFTERBEGIN);
   }
 
+  #renderFailedLoading() {
+    render(this.#failedLoadingComponent, this.#listComponent.element, RenderPosition.AFTERBEGIN);
+  }
+
   #renderEmptyList() {
     this.#emptyListComponent = new EmptyListView(this.#filterType);
     render(this.#emptyListComponent, this.#pointsContainer, RenderPosition.AFTERBEGIN);
   }
 
   #renderTripInfo = () => {
-    render(new TripInfo(), this.#headerContainer, RenderPosition.AFTERBEGIN);
+    render(this.#tripInfoComponent, this.#headerContainer, RenderPosition.AFTERBEGIN);
   };
 
   #handleModeChange = () => {
@@ -166,7 +179,7 @@ export default class ListPresenter {
         this.#pointPresenters.get(update.id).setSaving();
         try {
           await this.#pointsModel.updatePoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#pointPresenters.get(update.id).setAborting();
         }
         break;
@@ -174,7 +187,7 @@ export default class ListPresenter {
         this.#newPointPresenter.setSaving();
         try {
           await this.#pointsModel.addPoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#newPointPresenter.setAborting();
         }
         break;
@@ -182,7 +195,7 @@ export default class ListPresenter {
         this.#pointPresenters.get(update.id).setDeleting();
         try {
           await this.#pointsModel.deletePoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#pointPresenters.get(update.id).setAborting();
         }
         break;
@@ -207,6 +220,12 @@ export default class ListPresenter {
         this.#isLoading = false;
         remove(this.#loadingComponent);
         this.#renderPointsList();
+        break;
+      case UpdateType.FAILED:
+        this.#isFailed = true;
+        remove(this.#tripInfoComponent);
+        remove(this.#loadingComponent);
+        this.#renderFailedLoading();
         break;
     }
   };

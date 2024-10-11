@@ -6,6 +6,7 @@ export default class PointsModel extends Observable {
   #offers = [];
   #destinations = [];
   #pointsApiService = null;
+  _failedOnLoad = false;
 
   constructor({ pointsApiService }) {
     super();
@@ -34,6 +35,9 @@ export default class PointsModel extends Observable {
       this.#points = [];
       this.#offers = [];
       this.#destinations = [];
+      this._notify(UpdateType.FAILED);
+      this._failedOnLoad = true;
+      throw new Error('Can\'t load points');
     }
 
     this._notify(UpdateType.INIT);
