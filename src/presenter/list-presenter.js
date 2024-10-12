@@ -7,7 +7,6 @@ import SortView from '../view/sort-view.js';
 import ListView from '../view/list-view.js';
 import LoadingView from '../view/loading-view.js';
 import EmptyListView from '../view/empty-list-view.js';
-import TripInfo from '../view/trip-info-view.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import FailedLoadView from '../view/failed-load-view.js';
@@ -22,9 +21,9 @@ export default class ListPresenter {
   #pointsContainer = null;
   #pointsModel = [];
   #filtersModel = null;
-  #headerContainer = null;
   #emptyListComponent = null;
   #newPointPresenter = null;
+  #tripInfoComponent = null;
 
   #sortComponent = null;
   #currentSortType = SortType.DAY;
@@ -36,18 +35,16 @@ export default class ListPresenter {
     upperLimit: TimeLimit.UPPER_LIMIT
   });
 
-  #tripInfoComponent = new TripInfo();
   #listComponent = new ListView();
   #loadingComponent = new LoadingView();
   #failedLoadingComponent = new FailedLoadView();
 
   #pointPresenters = new Map();
 
-  constructor({ pointsContainer, pointsModel, filtersModel, headerContainer, onNewPointDestroy }) {
+  constructor({ pointsContainer, pointsModel, filtersModel, onNewPointDestroy }) {
     this.#pointsContainer = pointsContainer;
     this.#pointsModel = pointsModel;
     this.#filtersModel = filtersModel;
-    this.#headerContainer = headerContainer;
 
     this.#newPointPresenter = new NewPointPresenter({
       pointsContainer: this.#listComponent.element,
@@ -85,8 +82,6 @@ export default class ListPresenter {
   }
 
   init() {
-
-    this.#renderTripInfo();
     this.#renderPointsList();
   }
 
@@ -161,10 +156,6 @@ export default class ListPresenter {
     this.#emptyListComponent = new EmptyListView(this.#filterType);
     render(this.#emptyListComponent, this.#pointsContainer, RenderPosition.AFTERBEGIN);
   }
-
-  #renderTripInfo = () => {
-    render(this.#tripInfoComponent, this.#headerContainer, RenderPosition.AFTERBEGIN);
-  };
 
   #handleModeChange = () => {
     this.#newPointPresenter.destroy();

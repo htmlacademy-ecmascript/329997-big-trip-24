@@ -5,6 +5,7 @@ import NewPointButtonView from './view/new-point-button-view.js';
 import PointsModel from './model/points-model.js';
 import FiltersModel from './model/filters-model.js';
 import PointsApiService from './points-api-service.js';
+import TripInfoPresenter from './presenter/trip-info-presenter.js';
 
 const AUTHORIZATION = 'Basic ee863jdfbdv';
 const END_POINT = 'https://24.objects.htmlacademy.pro/big-trip';
@@ -23,14 +24,18 @@ const listPresenter = new ListPresenter({
   pointsContainer: tripEventsContainer,
   pointsModel,
   filtersModel,
-  headerContainer: tripHeaderContainer,
   onNewPointDestroy: handleNewPointFormClose,
+});
+
+const tripInfoPresenter = new TripInfoPresenter({
+  headerContainer: tripHeaderContainer,
+  pointsModel,
 });
 
 const filterPresenter = new FilterPresenter({
   filterContainer: tripFilterContainer,
   filtersModel,
-  pointsModel
+  pointsModel,
 });
 
 const newPointButtonComponent = new NewPointButtonView({
@@ -46,6 +51,7 @@ function handleNewPointButtonClick() {
   newPointButtonComponent.element.disabled = true;
 }
 
+tripInfoPresenter.init();
 filterPresenter.init();
 listPresenter.init();
 pointsModel.init()
