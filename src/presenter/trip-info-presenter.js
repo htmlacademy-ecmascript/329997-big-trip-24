@@ -23,6 +23,10 @@ export default class TripInfoPresenter {
     this.#points = this.#pointsModel.points;
     this.#destinations = this.#pointsModel.destinations;
 
+    if (this.#points.length === 0) {
+      return;
+    }
+
     this.#tripInfoComponent = new TripInfo({
       route: this.#getTripRoute(),
       dates: this.#getTripDates(),
@@ -42,8 +46,11 @@ export default class TripInfoPresenter {
     const tripDestinations = this.#points.map((point) => getDestination(this.#destinations, point.destination));
     const tripDestinationsNames = tripDestinations.map((destination) => destination.name);
 
+    if (tripDestinations.length === 0) {
+      return;
+    }
     if (tripDestinations.length <= 3) {
-      return {...tripDestinationsNames.join('—')};
+      return tripDestinationsNames.join(' — ');
     } else {
       return `${tripDestinationsNames[0]} — ... — ${tripDestinationsNames[tripDestinationsNames.length - 1]}`;
     }

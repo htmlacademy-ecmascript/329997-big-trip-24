@@ -83,6 +83,9 @@ export default class NewPointPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this.#handleModelEvent(
+        UpdateType.MINOR,
+      );
       this.destroy();
     }
   };

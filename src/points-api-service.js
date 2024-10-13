@@ -1,5 +1,4 @@
 import ApiService from './framework/api-service.js';
-import dayjs from 'dayjs';
 
 const Method = {
   GET: 'GET',
@@ -63,8 +62,8 @@ export default class PointsApiService extends ApiService {
   #adaptToServer(point) {
     const adaptedPoint = {...point,
       'base_price': Number(point.basePrice),
-      'date_from': dayjs(point.dateFrom).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-      'date_to': dayjs(point.dateTo).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+      'date_from': point.dateFrom,
+      'date_to': point.dateTo,
       'is_favorite': point.isFavorite,
     };
 
