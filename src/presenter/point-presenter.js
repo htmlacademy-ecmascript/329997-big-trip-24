@@ -68,7 +68,7 @@ export default class PointPresenter {
     }
 
     if (this.#mode === Mode.EDITING) {
-      replace(this.#editPointComponent, prevEditPointComponent);
+      replace(this.#pointComponent, prevEditPointComponent);
       this.#mode = Mode.DEFAULT;
     }
 
@@ -161,7 +161,6 @@ export default class PointPresenter {
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       update,
     );
-    this.#replaceEditToView();
   };
 
   #handleDeleteClick = (point) => {

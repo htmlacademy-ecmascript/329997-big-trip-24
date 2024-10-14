@@ -3,6 +3,7 @@ import { UpdateType } from '../const.js';
 import TripInfo from '../view/trip-info-view.js';
 import { getDestination } from '../utils/point.js';
 import { getFormattedDayInfoFromPointDate } from '../utils/utils.js';
+import { getOffersByType } from '../utils/point.js';
 
 export default class TripInfoPresenter {
   #headerContainer = null;
@@ -10,6 +11,7 @@ export default class TripInfoPresenter {
   #tripInfoComponent = null;
   #points = null;
   #destinations = null;
+  #offers = null;
 
   constructor({ headerContainer, pointsModel }) {
     this.#pointsModel = pointsModel;
@@ -22,8 +24,10 @@ export default class TripInfoPresenter {
     const prevTripInfoComponent = this.#tripInfoComponent;
     this.#points = this.#pointsModel.points;
     this.#destinations = this.#pointsModel.destinations;
+    this.#offers = this.#pointsModel.offers;
 
     if (this.#points.length === 0) {
+      remove(prevTripInfoComponent);
       return;
     }
 
@@ -67,8 +71,17 @@ export default class TripInfoPresenter {
   };
 
   #getTotalCost = () => {
-    const pointPrices = this.#points.map((point) => Number(point.basePrice));
-    return pointPrices.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    const basePrices = this.#points.map((point) => Number(point.basePrice));
+    const totalBasePrice = basePrices.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+    let totalOffersPrice = 0;
+    this.#points.forEach((point) => {
+      const offersPoint = getOffersByType(this.#offers, point.type);
+      point.offers.forEach((id) => {
+        totalOffersPrice += offersPoint.find((offer) => offer.id === id).price;
+      });
+    });
+    return totalBasePrice + totalOffersPrice;
   };
 
   #handleModelEvent = (updateType) => {

@@ -23,7 +23,6 @@ export default class ListPresenter {
   #filtersModel = null;
   #emptyListComponent = null;
   #newPointPresenter = null;
-  #tripInfoComponent = null;
 
   #sortComponent = null;
   #currentSortType = SortType.DAY;
@@ -63,14 +62,12 @@ export default class ListPresenter {
     const filteredPoints = filter[this.#filterType](points);
 
     switch (this.#currentSortType) {
-      case SortType.DAY:
-        return filteredPoints.sort(sortPointsByDate);
       case SortType.TIME:
         return filteredPoints.sort(sortPointsByTime);
       case SortType.PRICE:
         return filteredPoints.sort(sortPointsByPrice);
     }
-    return filteredPoints;
+    return filteredPoints.sort(sortPointsByDate);
   }
 
   get allOffers() {
@@ -214,7 +211,6 @@ export default class ListPresenter {
         break;
       case UpdateType.FAILED:
         this.#isFailed = true;
-        remove(this.#tripInfoComponent);
         remove(this.#loadingComponent);
         this.#renderFailedLoading();
         break;

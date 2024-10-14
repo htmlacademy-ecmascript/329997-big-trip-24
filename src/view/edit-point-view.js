@@ -265,6 +265,7 @@ export default class EditPointView extends AbstractStatefulView {
     evt.preventDefault();
     let pointOffers = this._state.offers;
     const clickedOfferId = evt.currentTarget.dataset.id;
+
     if (pointOffers.includes(clickedOfferId)) {
       pointOffers = pointOffers.filter((element) => element !== clickedOfferId);
     } else {
@@ -287,7 +288,7 @@ export default class EditPointView extends AbstractStatefulView {
   #priceChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateElement({
-      basePrice: evt.target.value,
+      basePrice: Number(evt.target.value),
     });
   };
 
