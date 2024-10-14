@@ -83,7 +83,7 @@ export default class ListPresenter {
   }
 
   createPoint() {
-    this.#currentSortType = SortType.DEFAULT;
+    this.#currentSortType = SortType.DAY;
     this.#filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init(this.allOffers, this.allDestinations);
     this.#removeSort();

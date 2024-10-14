@@ -6,8 +6,8 @@ import { getTimeDeltaNotFormatted } from './utils';
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
-const isFuturePoint = (dateFrom) => dateFrom && dayjs().isBefore(dateFrom, 'day');
-const isPastPoint = (dateTo) => dateTo && dayjs().isAfter(dateTo, 'day');
+const isFuturePoint = (dateFrom) => dateFrom && dayjs().isBefore(dateFrom, 'D');
+const isPastPoint = (dateTo) => dateTo && dayjs().isAfter(dateTo, 'D');
 const isPresentPoint = (dateFrom, dateTo) => dateFrom && dateTo && dayjs().isSameOrAfter(dayjs(dateFrom)) && dayjs().isSameOrBefore(dayjs(dateTo));
 
 const getOffersByType = (allOffers, type) => allOffers.find((element) => element.type === type).offers;
@@ -48,6 +48,6 @@ const sortPointsByPrice = (pointA, pointB) => {
   return weight ?? dayjs(pointB.basePrice).diff(dayjs(pointA.basePrice));
 };
 
-const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'day');
+const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
 
 export { isFuturePoint, isPastPoint, isPresentPoint, sortPointsByDate, sortPointsByTime, sortPointsByPrice, getOffersByType, getOffers, getDestination, isDatesEqual };
