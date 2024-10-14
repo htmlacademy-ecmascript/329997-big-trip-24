@@ -1,35 +1,30 @@
-import {remove, render, RenderPosition} from '../framework/render.js';
+import { remove, render, RenderPosition } from '../framework/render.js';
 import EditPointView from '../view/edit-point-view.js';
-import {nanoid} from 'nanoid';
-import {UserAction, UpdateType} from '../const.js';
+import { UserAction, UpdateType } from '../const.js';
 
 export default class NewPointPresenter {
   #pointsContainer = null;
   #handleDataChange = null;
   #handleModelEvent = null;
   #handleDestroy = null;
-  #allOffers = null;
-  #allDestinations = null;
 
   #editPointComponent = null;
 
-  constructor({allOffers, allDestinations, pointsContainer, onDataChange, onModelEvent, onDestroy}) {
-    this.#allOffers = allOffers;
-    this.#allDestinations = allDestinations;
+  constructor({pointsContainer, onDataChange, onModelEvent, onDestroy}) {
     this.#pointsContainer = pointsContainer;
     this.#handleDataChange = onDataChange;
     this.#handleModelEvent = onModelEvent;
     this.#handleDestroy = onDestroy;
   }
 
-  init() {
+  init(allOffers, allDestinations) {
     if (this.#editPointComponent !== null) {
       return;
     }
 
     this.#editPointComponent = new EditPointView({
-      allOffers: this.#allOffers,
-      allDestinations: this.#allDestinations,
+      allOffers: allOffers,
+      allDestinations: allDestinations,
       onSaveClick: this.#handleFormSubmit,
       onCancelClick: this.#handleCancelClick,
     });
@@ -52,13 +47,30 @@ export default class NewPointPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
+  setSaving() {
+    this.#editPointComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this.#editPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+    this.#editPointComponent.shake(resetFormState);
+  }
+
   #handleFormSubmit = (point) => {
     this.#handleDataChange(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      { id: nanoid(), ...point },
+      point,
     );
-    this.destroy();
   };
 
   #handleCancelClick = () => {
@@ -71,6 +83,9 @@ export default class NewPointPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this.#handleModelEvent(
+        UpdateType.MINOR,
+      );
       this.destroy();
     }
   };

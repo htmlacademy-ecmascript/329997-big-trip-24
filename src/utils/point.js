@@ -1,13 +1,15 @@
 import dayjs from 'dayjs';
 import { getTimeDeltaNotFormatted } from './utils';
 
-const isFuturePoint = (dateFrom) => dateFrom && dayjs().isBefore(dateFrom, 'D');
-const isPastPoint = (dateTo) => dateTo && dayjs().isAfter(dateTo, 'D');
-const isPresentPoint = (dateFrom, dateTo) =>
-  dateFrom &&
-  dateTo &&
-  (dayjs().isBefore(dateFrom, 'D') || dayjs().isSame(dateFrom, 'D')) &&
-  (dayjs().isAfter(dateTo, 'D') || dayjs().isSame(dateTo, 'D'));
+const isFuturePoint = (dateFrom) => dateFrom && dayjs().isBefore(dateFrom, 'day');
+const isPastPoint = (dateTo) => dateTo && dayjs().isAfter(dateTo, 'day');
+const isPresentPoint = (dateFrom, dateTo) =>{
+  const now = dayjs();
+  return (
+    dateFrom && dateTo &&
+  (now.isBefore(dateFrom, 'day') || now.isSame(dateFrom, 'day')) &&
+  (now.isAfter(dateTo, 'day') || now.isSame(dateTo, 'day')));
+};
 
 const getOffersByType = (allOffers, type) => allOffers.find((element) => element.type === type).offers;
 
@@ -39,14 +41,14 @@ const sortPointsByDate = (pointA, pointB) => {
 const sortPointsByTime = (pointA, pointB) => {
   const timeDeltaA = getTimeDeltaNotFormatted(pointA.dateFrom, pointA.dateTo);
   const timeDeltaB = getTimeDeltaNotFormatted(pointB.dateFrom, pointB.dateTo);
-  return timeDeltaA - timeDeltaB;
+  return timeDeltaB - timeDeltaA;
 };
 
 const sortPointsByPrice = (pointA, pointB) => {
-  const weight = getWeightForSortParameter(pointA.basePrice, pointB.basePrice);
-  return weight ?? dayjs(pointA.basePrice).diff(dayjs(pointB.basePrice));
+  const weight = getWeightForSortParameter(pointB.basePrice, pointA.basePrice);
+  return weight ?? dayjs(pointB.basePrice).diff(dayjs(pointA.basePrice));
 };
 
-const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
+const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'day');
 
 export { isFuturePoint, isPastPoint, isPresentPoint, sortPointsByDate, sortPointsByTime, sortPointsByPrice, getOffersByType, getOffers, getDestination, isDatesEqual };

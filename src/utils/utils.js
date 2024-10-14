@@ -1,8 +1,10 @@
 import dayjs from 'dayjs';
-import { DAY_FORMAT, POINT_TIME_FORMAT, NEW_POINT_TIME_FORMAT, MINUTES_IN_DAY, MINUTES_IN_HOUR, TIME_PAD_FORMAT } from '../const.js';
+import { DAY_FORMAT, DAY_FORMAT_INFO, POINT_TIME_FORMAT, NEW_POINT_TIME_FORMAT, MINUTES_IN_DAY, MINUTES_IN_HOUR, TIME_PAD_FORMAT } from '../const.js';
 
 
 const getFormattedDayFromPointDate = (date) => date ? dayjs(date).format(DAY_FORMAT) : '';
+
+const getFormattedDayInfoFromPointDate = (date) => date ? dayjs(date).format(DAY_FORMAT_INFO) : '';
 
 const getFormattedTimeFromPointDate = (date) => date ? dayjs(date).format(POINT_TIME_FORMAT) : '';
 
@@ -34,4 +36,4 @@ const getTimeDeltaNotFormatted = (startTime, endTime) => {
   return dateTo.diff(dateFrom);
 };
 
-export { getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getTimeDelta, getTimeDeltaNotFormatted, getFormattedTimeFromNewPointDate };
+export { getFormattedDayFromPointDate, getFormattedTimeFromPointDate, getFormattedDayInfoFromPointDate, getTimeDelta, getTimeDeltaNotFormatted, getFormattedTimeFromNewPointDate };
