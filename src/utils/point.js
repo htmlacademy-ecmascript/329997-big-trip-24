@@ -1,15 +1,14 @@
 import dayjs from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import { getTimeDeltaNotFormatted } from './utils';
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 const isFuturePoint = (dateFrom) => dateFrom && dayjs().isBefore(dateFrom, 'day');
 const isPastPoint = (dateTo) => dateTo && dayjs().isAfter(dateTo, 'day');
-const isPresentPoint = (dateFrom, dateTo) =>{
-  const now = dayjs();
-  return (
-    dateFrom && dateTo &&
-  (now.isBefore(dateFrom, 'day') || now.isSame(dateFrom, 'day')) &&
-  (now.isAfter(dateTo, 'day') || now.isSame(dateTo, 'day')));
-};
+const isPresentPoint = (dateFrom, dateTo) => dateFrom && dateTo && dayjs().isSameOrAfter(dayjs(dateFrom)) && dayjs().isSameOrBefore(dayjs(dateTo));
 
 const getOffersByType = (allOffers, type) => allOffers.find((element) => element.type === type).offers;
 

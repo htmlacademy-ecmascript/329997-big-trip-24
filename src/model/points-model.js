@@ -6,7 +6,7 @@ export default class PointsModel extends Observable {
   #offers = [];
   #destinations = [];
   #pointsApiService = null;
-  _failedOnLoad = false;
+  failedOnLoad = false;
 
   constructor({ pointsApiService }) {
     super();
@@ -36,7 +36,7 @@ export default class PointsModel extends Observable {
       this.#offers = [];
       this.#destinations = [];
       this._notify(UpdateType.FAILED);
-      this._failedOnLoad = true;
+      this.failedOnLoad = true;
     }
 
     this._notify(UpdateType.INIT);
@@ -81,7 +81,7 @@ export default class PointsModel extends Observable {
       basePrice: point['base_price'],
       dateFrom: point['date_from'],
       dateTo: point['date_to'],
-      'isFavorite': point['is_favorite']
+      isFavorite: point['is_favorite']
     };
 
     delete adaptedPoint['base_price'];

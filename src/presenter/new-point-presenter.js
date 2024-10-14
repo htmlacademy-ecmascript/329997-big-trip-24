@@ -49,7 +49,6 @@ export default class NewPointPresenter {
 
   setSaving() {
     this.#editPointComponent.updateElement({
-      isDisabled: true,
       isSaving: true,
     });
   }
@@ -57,7 +56,6 @@ export default class NewPointPresenter {
   setAborting() {
     const resetFormState = () => {
       this.#editPointComponent.updateElement({
-        isDisabled: false,
         isSaving: false,
         isDeleting: false,
       });
@@ -74,19 +72,20 @@ export default class NewPointPresenter {
   };
 
   #handleCancelClick = () => {
+    this.destroy();
     this.#handleModelEvent(
       UpdateType.MINOR,
     );
-    this.destroy();
   };
 
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this.destroy();
       this.#handleModelEvent(
         UpdateType.MINOR,
       );
-      this.destroy();
+
     }
   };
 }

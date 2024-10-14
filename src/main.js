@@ -57,7 +57,7 @@ listPresenter.init();
 pointsModel.init()
   .finally(() => {
     render(newPointButtonComponent, tripHeaderContainer);
-    if (pointsModel._failedOnLoad) {
+    if (pointsModel.failedOnLoad) {
       newPointButtonComponent.element.disabled = true;
     }
   });

@@ -12,7 +12,7 @@ import NewPointPresenter from './new-point-presenter.js';
 import FailedLoadView from '../view/failed-load-view.js';
 
 const TimeLimit = {
-  LOWER_LIMIT: 350,
+  LOWER_LIMIT: 300,
   UPPER_LIMIT: 1000,
 };
 
@@ -47,7 +47,7 @@ export default class ListPresenter {
 
     this.#newPointPresenter = new NewPointPresenter({
       pointsContainer: this.#listComponent.element,
-      onDataChange: this.#handleViewAction,
+      onDataChange: this.#handleDataEvent,
       onModelEvent: this.#handleModelEvent,
       onDestroy: onNewPointDestroy,
     });
@@ -134,7 +134,7 @@ export default class ListPresenter {
       point,
       allOffers: this.allOffers,
       allDestinations: this.allDestinations,
-      onDataChange: this.#handleViewAction,
+      onDataChange: this.#handleDataEvent,
       onModeChange: this.#handleModeChange,
     });
     pointPresenter.init(point);
@@ -159,7 +159,7 @@ export default class ListPresenter {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
-  #handleViewAction = async (actionType, updateType, update) => {
+  #handleDataEvent = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
 
     switch (actionType) {
