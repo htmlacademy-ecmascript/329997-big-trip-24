@@ -37,7 +37,6 @@ export default class PointsModel extends Observable {
       this.#destinations = [];
       this._notify(UpdateType.FAILED);
       this._failedOnLoad = true;
-      //throw new Error('Can\'t load points');
     }
 
     this._notify(UpdateType.INIT);
