@@ -86,21 +86,11 @@ export default class TripInfoPresenter {
 
   #handleModelEvent = (updateType) => {
     switch (updateType) {
-      case UpdateType.PATCH:
-        this.init();
-        break;
-      case UpdateType.MINOR:
-        this.init();
-        break;
-      case UpdateType.MAJOR:
-        this.init();
-        break;
-      case UpdateType.INIT:
-        this.init();
-        break;
       case UpdateType.FAILED:
         remove(this.#tripInfoComponent);
         break;
+      default:
+        this.init();
     }
   };
 }

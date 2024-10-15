@@ -108,7 +108,7 @@ export default class PointPresenter {
 
   setAborting() {
     if (this.#mode === Mode.DEFAULT) {
-      this.#editPointComponent.shake();
+      this.#pointComponent.shake();
       return;
     }
     const resetFormState = () => {
@@ -154,7 +154,7 @@ export default class PointPresenter {
   };
 
   #handleFormSubmit = (update) => {
-    const isMinorUpdate = !(isDatesEqual(this.#point.dateFrom, update.dateFrom) || isDatesEqual(this.#point.dateTo, update.dateTo));
+    const isMinorUpdate = !isDatesEqual(this.#point.dateFrom, update.dateFrom) || !isDatesEqual(this.#point.dateTo, update.dateTo) || this.#point.basePrice !== update.basePrice;
 
     this.#handleDataChange(
       UserAction.UPDATE_POINT,

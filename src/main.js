@@ -7,7 +7,7 @@ import FiltersModel from './model/filters-model.js';
 import PointsApiService from './points-api-service.js';
 import TripInfoPresenter from './presenter/trip-info-presenter.js';
 
-const AUTHORIZATION = 'Basic ee863jdfbdv';
+const AUTHORIZATION = 'Basic ee863jdfudv';
 const END_POINT = 'https://24.objects.htmlacademy.pro/big-trip';
 
 const tripHeaderContainer = document.querySelector('.trip-main');
@@ -57,7 +57,7 @@ listPresenter.init();
 pointsModel.init()
   .finally(() => {
     render(newPointButtonComponent, tripHeaderContainer);
-    if (pointsModel._failedOnLoad) {
+    if (pointsModel.failedOnLoad) {
       newPointButtonComponent.element.disabled = true;
     }
   });

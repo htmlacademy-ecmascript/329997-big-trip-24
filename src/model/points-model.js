@@ -6,7 +6,7 @@ export default class PointsModel extends Observable {
   #offers = [];
   #destinations = [];
   #pointsApiService = null;
-  _failedOnLoad = false;
+  failedOnLoad = false;
 
   constructor({ pointsApiService }) {
     super();
@@ -36,7 +36,7 @@ export default class PointsModel extends Observable {
       this.#offers = [];
       this.#destinations = [];
       this._notify(UpdateType.FAILED);
-      this._failedOnLoad = true;
+      this.failedOnLoad = true;
     }
 
     this._notify(UpdateType.INIT);
@@ -46,7 +46,7 @@ export default class PointsModel extends Observable {
     try {
       const response = await this.#pointsApiService.updatePoint(update);
       const updatedPoint = this.#adaptToClient(response);
-      this.#points = this.#points.map((point) => point.id === update.id ? update : point);
+      this.#points = this.#points.map((point) => point.id === updatedPoint.id ? updatedPoint : point);
       this._notify(updateType, updatedPoint);
     } catch (err) {
       throw new Error('Can\'t update point');
@@ -81,7 +81,7 @@ export default class PointsModel extends Observable {
       basePrice: point['base_price'],
       dateFrom: point['date_from'],
       dateTo: point['date_to'],
-      'isFavorite': point['is_favorite']
+      isFavorite: point['is_favorite']
     };
 
     delete adaptedPoint['base_price'];

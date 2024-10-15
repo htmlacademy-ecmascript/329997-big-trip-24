@@ -49,17 +49,17 @@ export default class NewPointPresenter {
 
   setSaving() {
     this.#editPointComponent.updateElement({
-      isDisabled: true,
       isSaving: true,
+      isDisabled: true,
     });
   }
 
   setAborting() {
     const resetFormState = () => {
       this.#editPointComponent.updateElement({
-        isDisabled: false,
         isSaving: false,
         isDeleting: false,
+        isDisabled: false,
       });
     };
     this.#editPointComponent.shake(resetFormState);
