@@ -12,7 +12,7 @@ import NewPointPresenter from './new-point-presenter.js';
 import FailedLoadView from '../view/failed-load-view.js';
 
 const TimeLimit = {
-  LOWER_LIMIT: 300,
+  LOWER_LIMIT: 200,
   UPPER_LIMIT: 1000,
 };
 
@@ -225,7 +225,6 @@ export default class ListPresenter {
     this.#clearPointsPresenters();
     this.#removeSort();
     this.#renderPointsList();
-
   };
 
   #clearPointsPresenters() {

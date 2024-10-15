@@ -25,9 +25,10 @@ export default class FilterPresenter {
   init() {
     const prevFilterComponent = this.#filterComponent;
 
-    const filteredPointsCounters = [];
-    Object.keys(FilterType).forEach((type) => filteredPointsCounters.push(filter[type](this.#pointsModel.points).length));
-    const filterCounters = Object.assign(...Object.keys(FilterType).map((type, i) => ({[type]: filteredPointsCounters[i]})));
+    const filterCounters = Object.keys(FilterType).reduce((previousElement, currentElement) => ({
+      ...previousElement,
+      [currentElement]: filter[currentElement](this.#pointsModel.points).length
+    }), {});
 
     this.#filterComponent = new FilterView({
       filters: this.filters,

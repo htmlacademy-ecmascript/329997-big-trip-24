@@ -86,7 +86,7 @@ const createDestinationTemplate = (destination) => {
 };
 
 const createEditPointTemplate = (point, allOffers, allDestinations, isNewPoint) => {
-  const { basePrice, dateFrom, dateTo, type, offers, destination, isSaving, isDeleting } = point;
+  const { basePrice, dateFrom, dateTo, type, offers, destination, isSaving, isDeleting, isDisabled } = point;
   const offersByType = getOffersByType(allOffers, type);
   const offersTemplate = createOffersTemplate(offers, offersByType);
   const typesTemplate = createTypesTemplate(POINT_TYPES);
@@ -134,7 +134,7 @@ const createEditPointTemplate = (point, allOffers, allDestinations, isNewPoint) 
     </div>
     <button class="event__save-btn  btn  btn--blue" type="submit">${isSaving ? 'Saving...' : 'Save'}</button>
     ${isNewPoint ?
-      '<button class="event__reset-btn" type="reset">Cancel</button>' :
+      `<button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>Cancel</button>` :
       `<button class="event__reset-btn" type="reset">${isDeleting ? 'Deleting...' : 'Delete'}</button>
       <button class="event__rollup-btn" type="button">
       <span class="visually-hidden">Open event</span>
@@ -295,6 +295,7 @@ export default class EditPointView extends AbstractStatefulView {
       ...point,
       isSaving: false,
       isDeleting: false,
+      isDisabled: false,
     };
   }
 
@@ -303,6 +304,7 @@ export default class EditPointView extends AbstractStatefulView {
 
     delete point.isSaving;
     delete point.isDeleting;
+    delete point.isDisabled;
 
     return point;
   }
@@ -314,7 +316,7 @@ export default class EditPointView extends AbstractStatefulView {
         dateFormat: 'd/m/y H:i',
         enableTime: true,
         defaultDate: this._state.dateFrom,
-        maxDate:  this._state.dateTo,
+        maxDate: this._state.dateTo,
         'time_24hr': true,
         onClose: this.#dateFromChangeHandler
       },
