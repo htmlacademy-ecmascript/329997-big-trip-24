@@ -1,6 +1,5 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import { POINT_TYPES } from '../const.js';
-import { getOffersByType, getDestination } from '../utils/point.js';
+import { getOffersByType, getDestination, getPointTypes } from '../utils/point.js';
 import { capitalizeFirstLetter } from '../utils/common.js';
 import { getFormattedTimeFromNewPointDate } from '../utils/utils.js';
 import flatpickr from 'flatpickr';
@@ -89,7 +88,8 @@ const createEditPointTemplate = (point, allOffers, allDestinations, isNewPoint) 
   const { basePrice, dateFrom, dateTo, type, offers, destination, isSaving, isDeleting, isDisabled } = point;
   const offersByType = getOffersByType(allOffers, type);
   const offersTemplate = createOffersTemplate(offers, offersByType);
-  const typesTemplate = createTypesTemplate(POINT_TYPES);
+  const pointTypes = getPointTypes(allOffers);
+  const typesTemplate = createTypesTemplate(pointTypes);
   const destinationsOptionsTemplate = createDestinationOptionsTemplate(allDestinations);
   const destinationForPoint = getDestination(allDestinations, destination);
   const destinationInfoTemplate = createDestinationTemplate(destinationForPoint);
