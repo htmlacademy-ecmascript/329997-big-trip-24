@@ -1,6 +1,6 @@
 import { RenderPosition, replace, render, remove } from '../framework/render.js';
 import { UpdateType } from '../const.js';
-import TripInfo from '../view/trip-info-view.js';
+import TripInfoView from '../view/trip-info-view.js';
 import { getDestination } from '../utils/point.js';
 import { getFormattedDayInfoFromPointDate } from '../utils/utils.js';
 import { getOffersByType } from '../utils/point.js';
@@ -31,7 +31,7 @@ export default class TripInfoPresenter {
       return;
     }
 
-    this.#tripInfoComponent = new TripInfo({
+    this.#tripInfoComponent = new TripInfoView({
       route: this.#getTripRoute(),
       dates: this.#getTripDates(),
       totalCost: this.#getTotalCost(),
