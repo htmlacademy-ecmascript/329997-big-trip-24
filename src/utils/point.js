@@ -17,6 +17,8 @@ const getOffers = (allOffers, offers, type) => {
   return offers.map((offer) => offersByType.find((element) => element.id === offer));
 };
 
+const getPointTypes = (allOffers) => allOffers.map((offer) => offer.type);
+
 const getDestination = (allDestinations, destination) => destination ? allDestinations.find((element) => element.id === destination) : '';
 
 const getWeightForSortParameter = (parameterA, parameterB) => {
@@ -50,4 +52,4 @@ const sortPointsByPrice = (pointA, pointB) => {
 
 const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
 
-export { isFuturePoint, isPastPoint, isPresentPoint, sortPointsByDate, sortPointsByTime, sortPointsByPrice, getOffersByType, getOffers, getDestination, isDatesEqual };
+export { isFuturePoint, isPastPoint, isPresentPoint, sortPointsByDate, sortPointsByTime, sortPointsByPrice, getOffersByType, getOffers, getDestination, isDatesEqual, getPointTypes };

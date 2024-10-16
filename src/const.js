@@ -1,5 +1,3 @@
-const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-
 const DAY_FORMAT = 'MMM DD';
 const DAY_FORMAT_INFO = 'DD MMM';
 const POINT_TIME_FORMAT = 'HH:mm';
@@ -37,4 +35,4 @@ const UpdateType = {
   INIT: 'INIT',
 };
 
-export { POINT_TYPES, DAY_FORMAT, DAY_FORMAT_INFO, POINT_TIME_FORMAT, NEW_POINT_TIME_FORMAT, FilterType, SortType, MINUTES_IN_DAY, MINUTES_IN_HOUR, TIME_PAD_FORMAT, UserAction, UpdateType };
+export { DAY_FORMAT, DAY_FORMAT_INFO, POINT_TIME_FORMAT, NEW_POINT_TIME_FORMAT, FilterType, SortType, MINUTES_IN_DAY, MINUTES_IN_HOUR, TIME_PAD_FORMAT, UserAction, UpdateType };
